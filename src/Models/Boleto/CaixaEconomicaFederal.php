@@ -1,13 +1,13 @@
 <?php
-namespace Boletos\Models\Boletos;
+namespace  CbCaio\Boletos\Models\Boletos;
 
-use Boletos\Calculators\Calculator;
-use Boletos\Generators\Barcode;
-use Boletos\Models\Bancos\CaixaEconomicaFederal;
-use Boletos\Models\Beneficiario\BeneficiarioCEF;
-use Boletos\Models\BoletoInfo\BoletoInfo;
-use Boletos\Models\Boletos\Base\Boleto;
-use Boletos\Models\Pagador\Base\Pagador;
+use  CbCaio\Boletos\Calculators\Calculator;
+use  CbCaio\Boletos\Generators\Barcode;
+use  CbCaio\Boletos\Models\Bancos\CaixaEconomicaFederal;
+use  CbCaio\Boletos\Models\Beneficiario\BeneficiarioCEF;
+use  CbCaio\Boletos\Models\BoletoInfo\BoletoInfo;
+use  CbCaio\Boletos\Models\Boletos\Base\Boleto;
+use  CbCaio\Boletos\Models\Pagador\Base\Pagador;
 use Carbon\Carbon;
 
 class  BoletoCEF extends Boleto
@@ -92,7 +92,7 @@ class  BoletoCEF extends Boleto
         $campo_4 = substr($codigo_barras, 4, 1);
         $campo_5 =
             substr($codigo_barras, 5, 4) .
-            $this->formataNumero(substr($codigo_barras, 9, 10), 10, 0);
+            Calculator::formataNumero(substr($codigo_barras, 9, 10), 10, 0);
 
         $linha_digitavel = $campo_1 . $campo_2 . $campo_3 . $campo_4 . $campo_5;
 
@@ -136,7 +136,7 @@ class  BoletoCEF extends Boleto
 
     protected function calculaFatorVencimento()
     {
-        $data = $this->getDataVencimento();
+        $data = $this->info->getDataVencimentoCalculada();
 
         if (is_null($data))
         {

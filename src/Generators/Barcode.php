@@ -1,6 +1,6 @@
 <?php
 
-namespace Boletos\Generators;
+namespace  CbCaio\Boletos\Generators;
 
 use Boletos\Generators\Base\BarcodeGenerator;
 

@@ -1,18 +1,13 @@
 {
     "name": "cbcaio/boletos-laravel",
-    "description": "Gere boletos para impressão de maneira fácil e organizada",
-    "keywords": [
-        "cbcaio","caixa economica","geracao boletos","bancos","laravel","boletos"
-    ],
     "license": "GPL",
     "authors": [
         {
-            "name": "Caio C. Bolognani",
-            "email": "caio.bolognani@gmail.com",
-            "homepage": "http://www.caiobolognani.com",
-            "role": "Developer / Consultant"
+            "name": "cbcaio",
+            "email": "caio.bolognani@gmail.com"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
         "illuminate/support": "~5",
         "illuminate/database": "~5",

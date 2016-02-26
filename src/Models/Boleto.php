@@ -1,10 +1,10 @@
 <?php
-namespace DBSoft\packages\src\Models;
+namespace  CbCaio\Boletos;
 
-use Boletos\Models\Bancos\Base\Banco;
-use Boletos\Models\Beneficiario\Contracts\BeneficiarioInterface;
+use  CbCaio\Boletos\Models\Bancos\Base\Banco;
+use  CbCaio\Boletos\Models\Beneficiario\Contracts\BeneficiarioInterface;
 use Carbon\Carbon;
-use Boletos\Generators\Barcode;
+use  CbCaio\Boletos\Generators\Barcode;
 
 class  Boleto
 {

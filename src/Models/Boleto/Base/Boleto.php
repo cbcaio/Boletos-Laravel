@@ -1,12 +1,12 @@
 <?php
-namespace Boletos\Models\Boletos\Base;
+namespace  CbCaio\Boletos\Models\Boletos\Base;
 
-use Boletos\Generators\Barcode;
-use Boletos\Models\Bancos\Contracts\BancoInterface;
-use Boletos\Models\Beneficiario\Contracts\BeneficiarioInterface;
-use Boletos\Models\BoletoInfo\Contracts\BoletoInfoInterface;
-use Boletos\Models\Boletos\Contracts\BoletoInterface;
-use Boletos\Models\Pagador\Contracts\PagadorInterface;
+use  CbCaio\Boletos\Generators\Barcode;
+use  CbCaio\Boletos\Models\Bancos\Contracts\BancoInterface;
+use  CbCaio\Boletos\Models\Beneficiario\Contracts\BeneficiarioInterface;
+use  CbCaio\Boletos\Models\BoletoInfo\Contracts\BoletoInfoInterface;
+use  CbCaio\Boletos\Models\Boletos\Contracts\BoletoInterface;
+use  CbCaio\Boletos\Models\Pagador\Contracts\PagadorInterface;
 use Carbon\Carbon;
 
 abstract class Boleto implements BoletoInterface
@@ -22,30 +22,30 @@ abstract class Boleto implements BoletoInterface
             'codigo_banco_compensacao'    => '',
             'linha_digitavel'             => '',
             /* --------[B]------- */
-            'local_de_pagamento'          => "PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE",
+            'local_de_pagamento'          => "PREFERENCIALMENTE NAS CASAS LOTï¿½RICAS ATï¿½ O VALOR LIMITE",
             'vencimento'                  => 'DD/MM/AAAA',
             /* --------[C]------- */
 
             'beneficiario'                =>
                 [
-                    'razao_social' => 'Razão Social ou Nome Fantasia do Beneficiário',
+                    'razao_social' => 'Razï¿½o Social ou Nome Fantasia do Beneficiï¿½rio',
                     'cpf_cnpj'     => 'CPF/CNPJ*',
                     'endereco'     => 'endereco',
                     'cidade'       => 'cidade'
                 ],
             /*
              * Formato AAAA / XXXXXX-DV, onde:
-             * AAAA: Código da Agência do Beneficiário
-             * XXXXXX: Código do Beneficiário
-             * DV: Dígito Verificador do Código do Beneficiário (Módulo 11), conforme Anexo VI
+             * AAAA: Cï¿½digo da Agï¿½ncia do Beneficiï¿½rio
+             * XXXXXX: Cï¿½digo do Beneficiï¿½rio
+             * DV: Dï¿½gito Verificador do Cï¿½digo do Beneficiï¿½rio (Mï¿½dulo 11), conforme Anexo VI
              */
             'agencia_codigo_beneficiario' => 'AAAA / XXXXXX-DV',
             /* --------[D]------- */
 
             'data_do_documento'           => 'DD/MM/AAAA',
             /*
-             * Também chamado de “Seu Número”, é o número utilizado
-             * e controlado pelo Beneficiário para identificar o título de cobrança
+             * Tambï¿½m chamado de ï¿½Seu Nï¿½meroï¿½, ï¿½ o nï¿½mero utilizado
+             * e controlado pelo Beneficiï¿½rio para identificar o tï¿½tulo de cobranï¿½a
              */
             'nr_do_documento'             => '',
             'especie_doc'                 => '',
@@ -53,29 +53,29 @@ abstract class Boleto implements BoletoInterface
             'data_do_processamento'       => 'DD/MM/AAAA',
             /*
              * - Formato: XYNNNNNNNNNNNNNNN-D, onde:
-             *  X Modalidade/Carteira de Cobrança (1-Registrada/2-Sem Registro)
-             *  Y Emissão do boleto (4-Beneficiário)
-             *  NNNNNNNNNNNNNNN Nosso Número (15 posições livres do Beneficiário)
-             *  D *Dígito Verificador
+             *  X Modalidade/Carteira de Cobranï¿½a (1-Registrada/2-Sem Registro)
+             *  Y Emissï¿½o do boleto (4-Beneficiï¿½rio)
+             *  NNNNNNNNNNNNNNN Nosso Nï¿½mero (15 posiï¿½ï¿½es livres do Beneficiï¿½rio)
+             *  D *Dï¿½gito Verificador
              */
             'nosso_numero'                => 'XYNNNNNNNNNNNNNNN-D',
             /* --------[E]------- */
             'carteira'                    => 'SR ou RG',
             'especie_moeda'               => 'R$',
             'valor_documento'             => '< R$ 9.999.999,99',
-            'uso_do_banco'                => NULL,//'não preencher',
-            'qtde_moeda'                  => NULL,//'não preencher',
-            'xValor'                      => NULL,//'não preencher',
+            'uso_do_banco'                => NULL,//'nï¿½o preencher',
+            'qtde_moeda'                  => NULL,//'nï¿½o preencher',
+            'xValor'                      => NULL,//'nï¿½o preencher',
 
             /* --------[F]------- */
             //             'instrucoes'               => 'Preenchido com array',
-            'desconto'                    => NULL, //'não preencher',
+            'desconto'                    => NULL, //'nï¿½o preencher',
 
             /* --------[G]------- */
-            /*'juros'                       => NULL,'não preencher',*/
+            /*'juros'                       => NULL,'nï¿½o preencher',*/
 
             /* --------[H]------- */
-            /*'valor_cobrado'               => NULL,'não preencher',*/
+            /*'valor_cobrado'               => NULL,'nï¿½o preencher',*/
 
             /* --------[I]------- */
             'pagador'                     =>
@@ -83,12 +83,12 @@ abstract class Boleto implements BoletoInterface
                     'nome'              => NULL,
                     'endereco'          => NULL,
                     'cidade_estado_cep' => NULL,
-                    'cpf_cnpj'          => NULL//'Obrigatório na Cobrança Registrada.'
+                    'cpf_cnpj'          => NULL//'Obrigatï¿½rio na Cobranï¿½a Registrada.'
                 ]
             ,
             'sacador'                     =>
                 [
-                    'nome'     => 'emitente original do documento que originou o boleto de cobrança',
+                    'nome'     => 'emitente original do documento que originou o boleto de cobranï¿½a',
                     'cpf_cnpj' => ''
                 ]
             ,

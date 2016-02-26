@@ -1,7 +1,9 @@
 <?php
-namespace Boletos\Models\BoletoInfo;
+namespace  CbCaio\Boletos\Models\BoletoInfo;
 
-use Boletos\Models\BoletoInfo\Contracts\BoletoInfoInterface;
+use Carbon\Carbon;
+use CbCaio\Boletos\Calculators\Calculator;
+use CbCaio\Boletos\Models\BoletoInfo\Contracts\BoletoInfoInterface;
 
 class BoletoInfo implements BoletoInfoInterface
 {
@@ -110,13 +112,13 @@ class BoletoInfo implements BoletoInfoInterface
         {
             if ($formatado10digitos == TRUE)
             {
-                $valor_cobrado = $this->formataNumero($valor_cobrado, 10, 0);
+                $valor_cobrado = Calculator::formataNumero($valor_cobrado, 10, 0);
             }
 
             return $valor_cobrado;
         }
 
-        return $this->formataValor($valor_cobrado);
+        return Calculator::formataValor($valor_cobrado);
     }
 
     public function getDataVencimentoCalculada()

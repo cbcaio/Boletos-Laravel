@@ -1,7 +1,7 @@
 <?php
-namespace Boletos\Models\Pagador\Base;
+namespace  CbCaio\Boletos\Models\Pagador\Base;
 
-use Boletos\Models\Pagador\Contracts\PagadorInterface;
+use  CbCaio\Boletos\Models\Pagador\Contracts\PagadorInterface;
 
 class Pagador implements PagadorInterface
 {

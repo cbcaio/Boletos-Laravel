@@ -1,5 +1,5 @@
 <?php
-namespace Boletos\Calculators;
+namespace  CbCaio\Boletos\Calculators;
 
 abstract class Calculator
 {

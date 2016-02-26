@@ -1,5 +1,5 @@
 <?php
-namespace Boletos\Models\Pagador\Contracts;
+namespace  CbCaio\Boletos\Models\Pagador\Contracts;
 
 interface PagadorInterface
 {

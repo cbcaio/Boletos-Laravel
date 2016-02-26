@@ -1,5 +1,5 @@
 <?php
-namespace Boletos\Models\Beneficiario\Contracts;
+namespace  CbCaio\Boletos\Models\Beneficiario\Contracts;
 
 interface BeneficiarioInterface
 {

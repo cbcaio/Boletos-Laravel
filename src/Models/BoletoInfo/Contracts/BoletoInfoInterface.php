@@ -1,5 +1,5 @@
 <?php
-namespace Boletos\Models\BoletoInfo\Contracts;
+namespace  CbCaio\Boletos\Models\BoletoInfo\Contracts;
 
 use Carbon\Carbon;
 

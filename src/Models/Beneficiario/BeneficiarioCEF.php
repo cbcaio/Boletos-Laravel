@@ -1,8 +1,8 @@
 <?php
-namespace Boletos\Models\Beneficiario;
+namespace CbCaio\Boletos\Models\Beneficiario;
 
-use Boletos\Calculators\Calculator;
-use Boletos\Models\Beneficiario\Base\Beneficiario;
+use  CbCaio\Boletos\Calculators\Calculator;
+use  CbCaio\Boletos\Models\Beneficiario\Base\Beneficiario;
 
 class BeneficiarioCEF extends Beneficiario
 {

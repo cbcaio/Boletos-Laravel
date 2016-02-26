@@ -19,7 +19,7 @@
 //
 // See LICENSE.TXT file for more information.
 
-namespace Boletos\Generators\Base;
+namespace  CbCaio\Boletos\Generators\Base;
 
 abstract class BarcodeGenerator
 {

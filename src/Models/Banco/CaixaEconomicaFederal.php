@@ -1,8 +1,8 @@
 <?php
-namespace Boletos\Models\Bancos;
+namespace  CbCaio\Boletos\Models\Bancos;
 
-use Boletos\Calculators\Calculator;
-use Boletos\Models\Bancos\Base\Banco;
+use  CbCaio\Boletos\Calculators\Calculator;
+use  CbCaio\Boletos\Models\Bancos\Base\Banco;
 
 class  CaixaEconomicaFederal extends Banco
 {
@@ -16,10 +16,10 @@ class  CaixaEconomicaFederal extends Banco
     protected $nosso_numero_inicio;
 
     /**
-     * Modalidade/Carteira de Cobrança (1-Registrada/2-Sem Registro)
+     * Modalidade/Carteira de Cobranï¿½a (1-Registrada/2-Sem Registro)
      *
      * @param int $modalidade
-     * Emissão do boleto (4-Beneficiário)
+     * Emissï¿½o do boleto (4-Beneficiï¿½rio)
      * @param int $emissao
      */
     public function __construct($modalidade = 2, $emissao = 4)
