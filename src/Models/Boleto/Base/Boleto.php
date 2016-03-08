@@ -202,35 +202,6 @@ abstract class Boleto implements BoletoInterface
         return $string;
     }
 
-    private function getValorTaxa($valor_inteiro = FALSE)
-    {
-        $taxa       = $this->getTaxaPercentual() / 100;
-        $valor_taxa = intval($taxa * $this->getValorCobrado());
-
-        if ($valor_inteiro)
-        {
-            return $valor_taxa;
-        } else
-        {
-            return $this->formataValor($valor_taxa);
-        }
-    }
-
-    private function getValorMulta($valor_inteiro = FALSE)
-    {
-        $multa = $this->getMultaPencentual() / 100;
-
-        $valor_multa = intval($multa * $this->getValorCobrado());
-
-        if ($valor_inteiro)
-        {
-            return $valor_multa;
-        } else
-        {
-            return $this->formataValor($valor_multa);
-        }
-    }
-
     public function adicionaDemonstrativo($string)
     {
         $this->demonstrativo_array[] = $this->parseAttributes($string);

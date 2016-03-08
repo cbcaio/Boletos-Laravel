@@ -16,7 +16,7 @@ interface BoletoInfoInterface
     public function getDataVencimentoCalculada();
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getNossoNumeroRecebido();
 
@@ -81,9 +81,8 @@ interface BoletoInfoInterface
     public function getValorBase();
 
     /**
-     * @return mixed
-     */
-    public function getValorFinal();
+     * @return string|integer
+     */public function getValorFinal($formatado10digitos = FALSE, $inteiro = FALSE);
 
     /**
      * @param bool|FALSE $valor_inteiro

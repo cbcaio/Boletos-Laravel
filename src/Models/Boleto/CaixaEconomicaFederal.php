@@ -26,6 +26,34 @@ class  BoletoCEF extends Boleto
         );
     }
 
+    public function getCodigoBarras()
+    {
+        $codigo_barras =
+            $this->getCodigoBarrasInicio() .
+            $this->calculaDVGeralCodigoBarras() .
+            $this->getCodigoBarrasFinal();
+
+        return "$codigo_barras";
+    }
+
+    public function getLinhaDigitavelFormatada()
+    {
+        $linha_digitavel = $this->calculaLinhaDigitavel();
+
+        $campo_1 = substr($linha_digitavel, 0, 5) . '.' . substr($linha_digitavel, 5, 5) . ' ';
+        $campo_2 = substr($linha_digitavel, 10, 5) . '.' . substr($linha_digitavel, 15, 6) . ' ';
+        $campo_3 = substr($linha_digitavel, 21, 5) . '.' . substr($linha_digitavel, 26, 6) . ' ';
+        $campo_4 = substr($linha_digitavel, 32, 1) . ' ';
+        $campo_5 = substr($linha_digitavel, 33, 14);
+
+        return $campo_1 . $campo_2 . $campo_3 . $campo_4 . $campo_5;
+    }
+
+    public function getNossoNumeroFormatado()
+    {
+        return $this->info->getNossoNumeroRecebido();
+    }
+
     private function getCodigoBarrasInicio()
     {
         $banco = $this->banco;
@@ -54,16 +82,6 @@ class  BoletoCEF extends Boleto
         $codigo_barras_sem_dv = $this->getCodigoBarrasInicio() . $this->getCodigoBarrasFinal();
 
         return $codigo_barras_sem_dv;
-    }
-
-    public function getCodigoBarras()
-    {
-        $codigo_barras =
-            $this->getCodigoBarrasInicio() .
-            $this->calculaDVGeralCodigoBarras() .
-            $this->getCodigoBarrasFinal();
-
-        return "$codigo_barras";
     }
 
     private function calculaLinhaDigitavel()
@@ -99,39 +117,12 @@ class  BoletoCEF extends Boleto
         return $linha_digitavel;
     }
 
-    public function getLinhaDigitavelFormatada()
-    {
-        $linha_digitavel = $this->calculaLinhaDigitavel();
-
-        $campo_1 = substr($linha_digitavel, 0, 5) . '.' . substr($linha_digitavel, 5, 5) . ' ';
-        $campo_2 = substr($linha_digitavel, 10, 5) . '.' . substr($linha_digitavel, 15, 6) . ' ';
-        $campo_3 = substr($linha_digitavel, 21, 5) . '.' . substr($linha_digitavel, 26, 6) . ' ';
-        $campo_4 = substr($linha_digitavel, 32, 1) . ' ';
-        $campo_5 = substr($linha_digitavel, 33, 14);
-
-        return $campo_1 . $campo_2 . $campo_3 . $campo_4 . $campo_5;
-    }
-
     public function getCampoLivreDoCodigoDeBarras()
     {
         $campo_livre_sem_dv = $this->getCampoLivreSemDV();
         $dv_campo_livre     = $this->calculaDVCampoLivre();
 
         return "$campo_livre_sem_dv$dv_campo_livre";
-    }
-
-    public function adicionaDemonstrativo($string)
-    {
-        $this->demonstrativo_array[] = $this->parseAttributes($string);
-
-        return $this;
-    }
-
-    public function adicionaInstrucao($string)
-    {
-        $this->instrucoes_array[] = $this->parseAttributes($string);
-
-        return $this;
     }
 
     protected function calculaFatorVencimento()
@@ -202,32 +193,32 @@ class  BoletoCEF extends Boleto
         return Calculator::calculaModulo11SemDV0($codigo_barras_sem_dv);
     }
 
-    protected function getNossoNumeroConst1()
+    private function getNossoNumeroConst1()
     {
         return substr($this->getNossoNumeroSemDV(), 0, 1);
     }
 
-    protected function getNossoNumeroConst2()
+    private function getNossoNumeroConst2()
     {
         return substr($this->getNossoNumeroSemDV(), 1, 1);
     }
 
-    protected function getNossoNumeroSeq1()
+    private function getNossoNumeroSeq1()
     {
         return substr($this->getNossoNumeroSemDV(), 2, 3);
     }
 
-    protected function getNossoNumeroSeq2()
+    private function getNossoNumeroSeq2()
     {
         return substr($this->getNossoNumeroSemDV(), 5, 3);
     }
 
-    protected function getNossoNumeroSeq3()
+    private function getNossoNumeroSeq3()
     {
         return substr($this->getNossoNumeroSemDV(), 8, 9);
     }
 
-    protected function getCampoLivreSemDV()
+    private function getCampoLivreSemDV()
     {
         $campo_livre_parcial =
             $this->beneficiario->getCodigoBeneficiario() .
@@ -241,14 +232,9 @@ class  BoletoCEF extends Boleto
         return "$campo_livre_parcial";
     }
 
-    protected function calculaDVCampoLivre()
+    private function calculaDVCampoLivre()
     {
         return Calculator::calculaModulo11($this->getCampoLivreSemDV());
-    }
-
-    private function getNossoNumeroFormatado()
-    {
-        return $this->getNossoNumeroRecebido();
     }
 
     private function getNossoNumeroSemDV()
@@ -268,10 +254,6 @@ class  BoletoCEF extends Boleto
 
         return $agencia_do_beneficiario . ' / ' . $codigo_do_beneficiario . '-' . $dv_beneficiario;
     }
-
-
-
-
 
 
 }
