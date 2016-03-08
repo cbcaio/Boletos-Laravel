@@ -1,12 +1,12 @@
 <?php
-namespace Boletos\Models\Boletos\Base;
+namespace CbCaio\Boletos\Models\Boletos\Base;
 
-use Boletos\Generators\Barcode;
-use Boletos\Models\Bancos\Contracts\BancoInterface;
-use Boletos\Models\Beneficiario\Contracts\BeneficiarioInterface;
-use Boletos\Models\BoletoInfo\Contracts\BoletoInfoInterface;
-use Boletos\Models\Boletos\Contracts\BoletoInterface;
-use Boletos\Models\Pagador\Contracts\PagadorInterface;
+use CbCaio\Boletos\Generators\Barcode;
+use CbCaio\Boletos\Models\Bancos\Contracts\BancoInterface;
+use CbCaio\Boletos\Models\Beneficiario\Contracts\BeneficiarioInterface;
+use CbCaio\Boletos\Models\BoletoInfo\Contracts\BoletoInfoInterface;
+use CbCaio\Boletos\Models\Boletos\Contracts\BoletoInterface;
+use CbCaio\Boletos\Models\Pagador\Contracts\PagadorInterface;
 use Carbon\Carbon;
 
 abstract class Boleto implements BoletoInterface
@@ -15,8 +15,15 @@ abstract class Boleto implements BoletoInterface
     protected $beneficiario;
     protected $pagador;
     protected $info;
-
-    public $processed =
+    private   $atributos_parser    = [
+        ':taxa',
+        ':multa',
+        ':vencimento'
+    ];
+    public    $demonstrativo_array = [];
+    public    $instrucoes_array    = [];
+    public    $bars                = [];
+    public    $processed           =
         [
             /* --------[A]------- */
             'codigo_banco_compensacao'    => '',
@@ -97,16 +104,6 @@ abstract class Boleto implements BoletoInterface
             'codigo_de_barras'            => ''
         ];
 
-    private $atributos_parser = [
-        ':taxa',
-        ':multa',
-        ':vencimento'
-    ];
-
-    public $demonstrativo_array = [];
-    public $instrucoes_array    = [];
-    public $bars                = [];
-
     /**
      * @param BancoInterface        $banco
      * @param BeneficiarioInterface $beneficiario
@@ -131,7 +128,7 @@ abstract class Boleto implements BoletoInterface
         $this->processaDadosBoleto();
 
         $this->bars =
-            $barcodeGenerator->getBarcode($this->getCodigoBarras(),$barcodeGenerator::TYPE_INTERLEAVED_2_5)['bars'];
+            $barcodeGenerator->getBarcode($this->getCodigoBarras(), $barcodeGenerator::TYPE_INTERLEAVED_2_5)['bars'];
     }
 
     public function processaDadosBoleto()
@@ -147,29 +144,29 @@ abstract class Boleto implements BoletoInterface
                 'cidade'       => $this->beneficiario->getCidadeEstado()
             ];
         $this->processed['nosso_numero']             = $this->getNossoNumeroFormatado();
-        $this->processed['nr_do_documento']          = $this->getNumeroDocumento();
-        $this->processed['valor_documento']          = $this->getValorDocumento();
-        $this->processed['especie_doc']              = $this->getEspecieDoc();
-        $this->processed['carteira']                 = $this->getCarteiraBeneficiario();
-        $this->processed['aceite']                   = $this->getAceite();
+        $this->processed['nr_do_documento']          = $this->info->getNumeroDocumento();
+        $this->processed['valor_documento']          = $this->info->getValorFinal();
+        $this->processed['especie_doc']              = $this->info->getEspecieDoc();
+        $this->processed['aceite']                   = $this->info->getAceite();
+        $this->processed['carteira']                 = $this->beneficiario->getCarteira();
 
-        $this->processed['vencimento']                  = $this->getDataVencimento();
-        $this->processed['agencia_codigo_beneficiario'] = $this->getAgencia();
-        $this->processed['data_do_documento']           = $this->getDataDocumento();
-        $this->processed['data_do_processamento']       = $this->getDataProcessamento();
-        $this->processed['carteira']                    = $this->getCarteiraBeneficiario();
-        $this->processed['especie_moeda']               = $this->getEspecieMoeda();
+        $this->processed['vencimento']                  = $this->info->getDataVencimentoCalculada();
+        $this->processed['agencia_codigo_beneficiario'] = $this->beneficiario->getCodigoBeneficiario();
+        $this->processed['data_do_documento']           = $this->info->getDataDocumento();
+        $this->processed['data_do_processamento']       = $this->info->getDataProcessamento();
+        $this->processed['carteira']                    = $this->beneficiario->getCarteira();
+        $this->processed['especie_moeda']               = $this->info->getEspecieMoeda();
         $this->processed['pagador']                     =
             [
-                'nome'              => $this->getNomePagador(),
-                'endereco'          => $this->getEnderecoPagador(),
-                'cidade_estado_cep' => $this->getCidadeEstadoCepPagador(),
-                'cpf_cnpj'          => $this->getCpfCnpjPagador(),
+                'nome'              => $this->pagador->getNome(),
+                'endereco'          => $this->pagador->getEndereco(),
+                'cidade_estado_cep' => $this->pagador->getCidadeEstadoCep(),
+                'cpf_cnpj'          => $this->pagador->getCpfCnpj(),
             ];
         $this->processed['sacador']                     =
             [
-                'nome'     => $this->getNomeSacado(),
-                'cpf_cnpj' => $this->getCpfCnpjSacado()
+                'nome'     => $this->info->getNomeSacado(),
+                'cpf_cnpj' => $this->info->getCpfCnpjSacado()
             ];
 
         $this->processed['codigo_de_barras'] = $this->getCodigoBarras();
@@ -195,7 +192,8 @@ abstract class Boleto implements BoletoInterface
                         $string = preg_replace("/$attribute" . '\b/', $this->getValorMulta(), $string);
                         break;
                     case ":vencimento":
-                        $string = preg_replace("/$attribute" . '\b/', $this->info->getDataVencimentoCalculada(), $string);
+                        $string = preg_replace("/$attribute" . '\b/', $this->info->getDataVencimentoCalculada(),
+                                               $string);
                         break;
                 }
             }
@@ -203,9 +201,6 @@ abstract class Boleto implements BoletoInterface
 
         return $string;
     }
-
-
-
 
     private function getValorTaxa($valor_inteiro = FALSE)
     {
@@ -220,7 +215,6 @@ abstract class Boleto implements BoletoInterface
             return $this->formataValor($valor_taxa);
         }
     }
-
 
     private function getValorMulta($valor_inteiro = FALSE)
     {

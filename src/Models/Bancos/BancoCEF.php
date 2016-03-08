@@ -1,10 +1,10 @@
 <?php
-namespace Boletos\Models\Bancos;
+namespace CbCaio\Boletos\Models\Bancos;
 
-use Boletos\Calculators\Calculator;
-use Boletos\Models\Bancos\Base\Banco;
+use CbCaio\Boletos\Calculators\Calculator;
+use CbCaio\Boletos\Models\Bancos\Base\Banco;
 
-class  CaixaEconomicaFederal extends Banco
+class BancoCEF extends Banco
 {
     protected $codigo_banco = 104;
     protected $codigo_moeda = 9;

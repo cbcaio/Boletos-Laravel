@@ -1,5 +1,5 @@
 <?php
-namespace Boletos\Models\BoletoInfo\Contracts;
+namespace CbCaio\Boletos\Models\BoletoInfo\Contracts;
 
 use Carbon\Carbon;
 
@@ -84,5 +84,17 @@ interface BoletoInfoInterface
      * @return mixed
      */
     public function getValorFinal();
+
+    /**
+     * @param bool|FALSE $valor_inteiro
+     * @return string|integer
+     */
+    public function getValorTaxa($valor_inteiro = FALSE);
+
+    /**
+     * @param bool|FALSE $valor_inteiro
+     * @return string|integer
+     */
+    public function getValorMulta($valor_inteiro = FALSE);
 
 }

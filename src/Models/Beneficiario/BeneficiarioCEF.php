@@ -1,15 +1,14 @@
 <?php
-namespace Boletos\Models\Beneficiario;
+namespace CbCaio\Boletos\Models\Beneficiario;
 
-use Boletos\Calculators\Calculator;
-use Boletos\Models\Beneficiario\Base\Beneficiario;
+use CbCaio\Boletos\Calculators\Calculator;
+use CbCaio\Boletos\Models\Beneficiario\Base\Beneficiario;
 
 class BeneficiarioCEF extends Beneficiario
 {
     public function __construct()
     {
-        $config = config('boleto');
-
+        $config = config('boletos');
         $this->razao_social  = $config['razao_social'];
         $this->endereco      = $config['endereco'];
         $this->cpf_cnpj      = $config['cpf_cnpj'];
@@ -20,6 +19,9 @@ class BeneficiarioCEF extends Beneficiario
         $this->carteira = $config['carteira'];
     }
 
+    /*
+     * Se refere a conta, no formato definido pelo banco
+     */
     public function getCodigoBeneficiario()
     {
         return Calculator::formataNumero($this->getConta(), 6, 0);

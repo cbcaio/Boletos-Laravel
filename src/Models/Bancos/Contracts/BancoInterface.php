@@ -1,5 +1,5 @@
 <?php
-namespace Boletos\Models\Bancos\Contracts;
+namespace CbCaio\Boletos\Models\Bancos\Contracts;
 
 interface BancoInterface
 {

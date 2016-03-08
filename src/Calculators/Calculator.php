@@ -1,8 +1,13 @@
 <?php
-namespace Boletos\Calculators;
+namespace CbCaio\Boletos\Calculators;
 
 abstract class Calculator
 {
+    /*
+     * Cálcula o modulo de 11, porém em alguns casos o DV Geral não pode ser 0, então está função trata isso da
+     * seguinte forma:
+     *  SE RESULTADO = 0  OU RESULTADO > 9 ENTÃO DV = 1
+     */
     static function calculaModulo11SemDV0($numero)
     {
         $soma_resultados = Calculator::getResultadoSomaModulo11($numero);
@@ -18,6 +23,10 @@ abstract class Calculator
         }
     }
 
+    /*
+     * Calcula o modulo de 11, neste caso fazendo:
+     * SE RESULTADO > 9 ENTÃO DV = 0
+     */
     static function calculaModulo11($numero)
     {
         $soma_resultados = Calculator::getResultadoSomaModulo11($numero);
@@ -39,6 +48,12 @@ abstract class Calculator
         }
     }
 
+    /*
+     * Calcula o modulo de 10, neste caso fazendo:
+     * Quando o resultado da multiplicação for um número com 2 dígitos, somar os 2 algarismos
+     * Se o Total da Soma for inferior a 10, o DV corresponde à diferença entre 10 e o Total da Soma
+     * Se o resto da divisão for 0 (zero), o DV será 0 (zero)
+     */
     static function calculaModulo10($numero)
     {
         $soma_resultados = Calculator::getResultadoSomaModulo10($numero);
@@ -59,6 +74,61 @@ abstract class Calculator
         }
     }
 
+    /*
+     * Formata um número inserindo o valor desejado a esquerda até que o tamanho seja igual a quantidade informada
+     */
+    static function formataNumero($numero, $tamanho, $insere)
+    {
+        while (strlen($numero) < $tamanho)
+        {
+            $numero = $insere . $numero;
+        }
+
+        return $numero;
+    }
+
+    /*
+     * Formata um número colocando virgulas nos decimais e zeros.
+     */
+    static function formataValor($numero)
+    {
+        $tamanho       = strlen($numero);
+        $parte_decimal = substr($numero, $tamanho - 2, 2);
+        $parte_inteira = substr($numero, 0, $tamanho - 2);
+
+        if ($parte_inteira == '')
+        {
+            $parte_inteira = '0';
+        }
+
+        return $parte_inteira . ',' . $parte_decimal;
+    }
+
+    /**
+     * @param mixed $percentual Valor em % ou já divido por 100
+     * @param integer $base
+     * @return int
+     */
+    static function calculaPercentual($percentual, $base)
+    {
+        if ($percentual > 1)
+        {
+            $percentual = $percentual / 100;
+        }
+        $valor = intval($percentual * $base);
+
+        return $valor;
+    }
+
+    /*
+     * Função auxiliar para calculo do modulo de 10, faz a soma dos digitos dado os pesos.
+     */
+    /**
+     * @param string $numero
+     * @param int    $peso_superior
+     * @param int    $peso_inferior
+     * @return number
+     */
     static function getResultadoSomaModulo10($numero, $peso_superior = 2, $peso_inferior = 1)
     {
         $numero_array                  = str_split($numero, 1);
@@ -91,6 +161,15 @@ abstract class Calculator
         return array_sum($resultado_multiplicacao_array);
     }
 
+    /*
+     * Função auxiliar para calculo do modulo de 11, faz a soma dos digitos dado os pesos.
+     */
+    /**
+     * @param string $numero
+     * @param int    $peso_inferior
+     * @param int    $peso_superior
+     * @return number
+     */
     static function getResultadoSomaModulo11($numero, $peso_inferior = 2, $peso_superior = 9)
     {
         $numero_array         = str_split($numero, 1);
@@ -104,7 +183,6 @@ abstract class Calculator
             $res_multiplicacao = $numero_array[ $i ] * $multiplicador;
 
             $resultado_multiplicacao_array[ $i ] = $res_multiplicacao;
-
             if ($multiplicador >= $peso_superior)
             {
                 $multiplicador = $peso_inferior;
@@ -115,29 +193,5 @@ abstract class Calculator
         }
 
         return array_sum($resultado_multiplicacao_array);
-    }
-
-    static function formataNumero($numero, $tamanho, $insere)
-    {
-        while (strlen($numero) < $tamanho)
-        {
-            $numero = $insere . $numero;
-        }
-
-        return $numero;
-    }
-
-    static function formataValor($numero)
-    {
-        $tamanho       = strlen($numero);
-        $parte_decimal = substr($numero, $tamanho - 2, 2);
-        $parte_inteira = substr($numero, 0, $tamanho - 2);
-
-        if ($parte_inteira == '')
-        {
-            $parte_inteira = '0';
-        }
-
-        return $parte_inteira . ',' . $parte_decimal;
     }
 }

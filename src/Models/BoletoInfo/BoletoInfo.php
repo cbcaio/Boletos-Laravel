@@ -1,127 +1,145 @@
 <?php
-namespace Boletos\Models\BoletoInfo;
+namespace CbCaio\Boletos\Models\BoletoInfo;
 
-use Boletos\Models\BoletoInfo\Contracts\BoletoInfoInterface;
+use CbCaio\Boletos\Calculators\Calculator;
+use CbCaio\Boletos\Models\BoletoInfo\Contracts\BoletoInfoInterface;
+use Carbon\Carbon;
 
 class BoletoInfo implements BoletoInfoInterface
 {
-    protected $data_vencimento;
-    protected $nosso_numero;
-    protected $aceite;
-    protected $especie_doc;
-    protected $nome_sacado;
-    protected $cpf_cnpj_sacado;
-    protected $especie = "R$";
-    protected $numero_documento;
-    protected $data_documento;
-    protected $data_processamento;
-    protected $dias_para_pagar;
-    protected $taxa;
-    protected $multa;
-    protected $valor_base;
-    protected $valor_final;
+    /**
+     * All of the user's attributes.
+     *
+     * @var array
+     */
+    protected $attributes;
+
+    public function __construct(array $attributes)
+    {
+        $this->attributes = $attributes;
+    }
 
     public function getDataVencimentoRecebida()
     {
-        return $this->data_vencimento;
+        if (isset($this->attributes['data_vencimento']))
+        {
+            return Carbon::createFromFormat('d/m/Y', $this->attributes['data_vencimento']);
+        } else
+        {
+            return NULL;
+        }
     }
 
     public function getNossoNumeroRecebido()
     {
-        return $this->nosso_numero;
+        return $this->attributes['nosso_numero'];
     }
 
     public function getAceite()
     {
-        return $this->aceite;
+        return $this->attributes['aceite'];
     }
 
     public function getEspecieDoc()
     {
-        return $this->especie_doc;
+        return $this->attributes['especie_doc'];
     }
 
     public function getNomeSacado()
     {
-        return $this->nome_sacado;
+        return $this->attributes['nome_sacado'];
     }
 
     public function getCpfCnpjSacado()
     {
-        return $this->cpf_cnpj_sacado;
+        return $this->attributes['cpf_cnpj_sacado'];
     }
 
     public function getEspecieMoeda()
     {
-        return $this->especie;
+        return $this->attributes['especie'];
     }
 
     public function getNumeroDocumento()
     {
-        return $this->numero_documento;
+        return $this->attributes['numero_documento'];
     }
 
     public function getDataDocumento()
     {
-        return $this->data_documento;
+        if (isset($this->attributes['data_documento']))
+        {
+            return Carbon::createFromFormat('d/m/Y', $this->attributes['data_documento']);
+        } else
+        {
+            return NULL;
+        }
     }
 
     public function getDataProcessamento()
     {
-        return $this->data_processamento;
+        if (isset($this->attributes['data_processamento']))
+        {
+            return Carbon::createFromFormat('d/m/Y', $this->attributes['data_processamento']);
+        } else
+        {
+            return NULL;
+        }
     }
 
     public function getDiasParaPagar()
     {
-        return $this->dias_para_pagar;
+        return $this->attributes['dias_para_pagar'];
     }
 
     public function getTaxaPercentual()
     {
-        return $this->taxa;
+        return $this->attributes['taxa'];
     }
 
     public function getMultaPercentual()
     {
-        return $this->multa;
+        return $this->attributes['multa'];
     }
 
     public function getValorBase()
     {
-        return $this->valor_base;
+        return $this->attributes['valor_base'];
     }
 
     public function getValorFinal($formatado10digitos = FALSE, $inteiro = FALSE)
     {
-        $valor_cobrado = $this->info->getValorCobrado();
+        $valor_cobrado = $this->getValorBase();
         $data_base     = Carbon::create(2016, 1, 0, 0, 0, 0);
 
-        $data_vencimento = Carbon::createFromFormat('d/m/Y', $this->info->getDataVencimentoCalculada())
-                                 ->setTime(0, 0, 0);
-        $data_hoje       = $this->info  ->getDataProcessamento();
-        $vencido         = $data_hoje->between($data_base, $data_vencimento, TRUE);
+        $data_vencimento = $this->getDataVencimentoCalculada();
+        $data_hoje       = $this->getDataProcessamento();
+        $vencido         = !$data_hoje->between($data_base, $data_vencimento, TRUE);
 
         if ($vencido)
         {
             $valor_cobrado += $this->getValorTaxa(TRUE) + $this->getValorMulta(TRUE);
         }
 
+        if ($formatado10digitos == TRUE)
+        {
+            return Calculator::formataNumero($valor_cobrado, 10, 0);
+        }
+
         if ($inteiro == TRUE)
         {
-            if ($formatado10digitos == TRUE)
-            {
-                $valor_cobrado = $this->formataNumero($valor_cobrado, 10, 0);
-            }
-
             return $valor_cobrado;
         }
 
-        return $this->formataValor($valor_cobrado);
+        return Calculator::formataValor($valor_cobrado);
     }
 
     public function getDataVencimentoCalculada()
     {
-        if ($this->getDataVencimentoRecebida() == NULL)
+        if ($this->getDataVencimentoRecebida() instanceof Carbon)
+        {
+            return $this->getDataVencimentoRecebida();
+        } else
         {
             $dias_para_pagar = $this->getDiasParaPagar();
             if ($dias_para_pagar === NULL)
@@ -134,10 +152,32 @@ class BoletoInfo implements BoletoInfoInterface
 
                 return $data_vencimento;
             }
-
-        } else
-        {
-            return $this->getDataVencimentoRecebida();
         }
     }
+
+    public function getValorTaxa($valor_inteiro = FALSE)
+    {
+        $valor_taxa = Calculator::calculaPercentual($this->getTaxaPercentual(), $this->getValorBase());
+        if ($valor_inteiro)
+        {
+            return $valor_taxa;
+        } else
+        {
+            return Calculator::formataValor($valor_taxa);
+        }
+    }
+
+    public function getValorMulta($valor_inteiro = FALSE)
+    {
+        $valor_multa = Calculator::calculaPercentual($this->getMultaPercentual(), $this->getValorBase());
+        if ($valor_inteiro)
+        {
+            return $valor_multa;
+        } else
+        {
+            return Calculator::formataValor($valor_multa);
+        }
+    }
+
+
 }

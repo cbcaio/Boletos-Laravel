@@ -1,19 +1,19 @@
 <?php
-namespace Boletos\Models\Boletos;
+namespace CbCaio\Boletos\Models\Boletos;
 
-use Boletos\Calculators\Calculator;
-use Boletos\Generators\Barcode;
-use Boletos\Models\Bancos\CaixaEconomicaFederal;
-use Boletos\Models\Beneficiario\BeneficiarioCEF;
-use Boletos\Models\BoletoInfo\BoletoInfo;
-use Boletos\Models\Boletos\Base\Boleto;
-use Boletos\Models\Pagador\Base\Pagador;
+use CbCaio\Boletos\Calculators\Calculator;
+use CbCaio\Boletos\Generators\Barcode;
+use CbCaio\Boletos\Models\Bancos\BancoCEF;
+use CbCaio\Boletos\Models\Beneficiario\BeneficiarioCEF;
+use CbCaio\Boletos\Models\BoletoInfo\BoletoInfo;
+use CbCaio\Boletos\Models\Boletos\Base\Boleto;
+use CbCaio\Boletos\Models\Pagador\Base\Pagador;
 use Carbon\Carbon;
 
 class  BoletoCEF extends Boleto
 {
     public function __construct(
-        CaixaEconomicaFederal $banco,
+        BancoCEF $banco,
         BeneficiarioCEF $beneficiario,
         Pagador $pagador,
         BoletoInfo $info,
@@ -272,35 +272,6 @@ class  BoletoCEF extends Boleto
 
 
 
-    private function getValorTaxa($valor_inteiro = FALSE)
-    {
-        $taxa       = $this->getTaxaPercentual() / 100;
-        $valor_taxa = intval($taxa * $this->getValorCobrado());
-
-        if ($valor_inteiro)
-        {
-            return $valor_taxa;
-        } else
-        {
-            return $this->formataValor($valor_taxa);
-        }
-    }
-
-
-    private function getValorMulta($valor_inteiro = FALSE)
-    {
-        $multa = $this->getMultaPencentual() / 100;
-
-        $valor_multa = intval($multa * $this->getValorCobrado());
-
-        if ($valor_inteiro)
-        {
-            return $valor_multa;
-        } else
-        {
-            return $this->formataValor($valor_multa);
-        }
-    }
 
 
 }
