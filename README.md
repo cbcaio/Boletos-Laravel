@@ -52,7 +52,8 @@ informações:
   4. Informações do Boleto (valor, data vencimento, etc)
   
   Portando, você tem a opção de preencher essas opções ao criar um boleto:
-
+  
+  ```
      ...
      $beneficiario = new BeneficiarioCEF(FALSE, // true para carregar do arquivo de configuração
      [
@@ -97,6 +98,7 @@ informações:
      $boleto->processaDados();
      Neste ponto o boleto já está pronto para uso,
      ...
+  ```
 
 ## Change log
 
@@ -121,7 +123,7 @@ mande um e-mail :author_email ou abra uma issue.
 The GPL License (GPL). Por favor veja [License File](LICENSE.md) para mais informações.
 
 [ico-version]: https://img.shields.io/packagist/v/CbCaio/Boletos-Laravel.svg?style=flat-square
-[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-GPL-brightgreen.svg?style=flat-square
 [ico-travis]: https://img.shields.io/travis/CbCaio/Boletos-Laravel/master.svg?style=flat-square
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/CbCaio/Boletos-Laravel.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/CbCaio/Boletos-Laravel.svg?style=flat-square

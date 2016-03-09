@@ -11,7 +11,7 @@ class BeneficiarioCEF extends Beneficiario
         if ($load_from_config)
         {
             parent::__construct(config('boletos'));
-        } else
+        } elseif ($attributes)
         {
             parent::__construct($attributes);
         }

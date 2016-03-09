@@ -28,30 +28,30 @@ abstract class Boleto implements BoletoInterface
             'codigo_banco_compensacao'    => '',
             'linha_digitavel'             => '',
             /* --------[B]------- */
-            'local_de_pagamento'          => "PREFERENCIALMENTE NAS CASAS LOT�RICAS AT� O VALOR LIMITE",
+            'local_de_pagamento'          => "PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE",
             'vencimento'                  => 'DD/MM/AAAA',
             /* --------[C]------- */
 
             'beneficiario'                =>
                 [
-                    'razao_social' => 'Raz�o Social ou Nome Fantasia do Benefici�rio',
+                    'razao_social' => 'Razão Social ou Nome Fantasia do Beneficiário',
                     'cpf_cnpj'     => 'CPF/CNPJ*',
                     'endereco'     => 'endereco',
                     'cidade'       => 'cidade'
                 ],
             /*
              * Formato AAAA / XXXXXX-DV, onde:
-             * AAAA: C�digo da Ag�ncia do Benefici�rio
-             * XXXXXX: C�digo do Benefici�rio
-             * DV: D�gito Verificador do C�digo do Benefici�rio (M�dulo 11), conforme Anexo VI
+             * AAAA: Código da Agência do Beneficiário
+             * XXXXXX: Código do Beneficiário
+             * DV: Dígito Verificador do Código do Beneficiário (Módulo 11), conforme Anexo VI
              */
             'agencia_codigo_beneficiario' => 'AAAA / XXXXXX-DV',
             /* --------[D]------- */
 
             'data_do_documento'           => 'DD/MM/AAAA',
             /*
-             * Tamb�m chamado de �Seu N�mero�, � o n�mero utilizado
-             * e controlado pelo Benefici�rio para identificar o t�tulo de cobran�a
+             * Também chamado de "Seu Número", é o número utilizado
+             * e controlado pelo Beneficiário para identificar o título de cobrança
              */
             'nr_do_documento'             => '',
             'especie_doc'                 => '',
@@ -59,29 +59,29 @@ abstract class Boleto implements BoletoInterface
             'data_do_processamento'       => 'DD/MM/AAAA',
             /*
              * - Formato: XYNNNNNNNNNNNNNNN-D, onde:
-             *  X Modalidade/Carteira de Cobran�a (1-Registrada/2-Sem Registro)
-             *  Y Emiss�o do boleto (4-Benefici�rio)
-             *  NNNNNNNNNNNNNNN Nosso N�mero (15 posi��es livres do Benefici�rio)
-             *  D *D�gito Verificador
+             *  X Modalidade/Carteira de Cobrança (1-Registrada/2-Sem Registro)
+             *  Y Emissão do boleto (4-Beneficiário)
+             *  NNNNNNNNNNNNNNN Nosso Número (15 posições livres do Beneficiário)
+             *  D Dígito Verificador
              */
             'nosso_numero'                => 'XYNNNNNNNNNNNNNNN-D',
             /* --------[E]------- */
             'carteira'                    => 'SR ou RG',
             'especie_moeda'               => 'R$',
             'valor_documento'             => '< R$ 9.999.999,99',
-            'uso_do_banco'                => NULL,//'n�o preencher',
-            'qtde_moeda'                  => NULL,//'n�o preencher',
-            'xValor'                      => NULL,//'n�o preencher',
+            'uso_do_banco'                => NULL,//'não preencher',
+            'qtde_moeda'                  => NULL,//'não preencher',
+            'xValor'                      => NULL,//'não preencher',
 
             /* --------[F]------- */
-            //             'instrucoes'               => 'Preenchido com array',
-            'desconto'                    => NULL, //'n�o preencher',
+            'instrucoes'                  => [],
+            'desconto'                    => NULL, //'não preencher',
 
             /* --------[G]------- */
-            /*'juros'                       => NULL,'n�o preencher',*/
+            /*'juros'                       => NULL,'não preencher',*/
 
             /* --------[H]------- */
-            /*'valor_cobrado'               => NULL,'n�o preencher',*/
+            /*'valor_cobrado'               => NULL,'não preencher',*/
 
             /* --------[I]------- */
             'pagador'                     =>
@@ -89,12 +89,13 @@ abstract class Boleto implements BoletoInterface
                     'nome'              => NULL,
                     'endereco'          => NULL,
                     'cidade_estado_cep' => NULL,
-                    'cpf_cnpj'          => NULL//'Obrigat�rio na Cobran�a Registrada.'
+                    'cpf_cnpj'          => NULL
+                    //'Obrigatório na Cobrança Registrada.'
                 ]
             ,
             'sacador'                     =>
                 [
-                    'nome'     => 'emitente original do documento que originou o boleto de cobran�a',
+                    'nome'     => 'emitente original do documento que originou o boleto de cobrança',
                     'cpf_cnpj' => ''
                 ]
             ,
@@ -123,6 +124,9 @@ abstract class Boleto implements BoletoInterface
         $this->pagador      = $pagador;
     }
 
+    /**
+     * Função responsável por processar os dados que serão impressos no boleto
+     */
     public function processaDadosBoleto()
     {
         $this->processed['codigo_banco_compensacao'] = $this->banco->getCodigoCompensacao();
@@ -167,11 +171,18 @@ abstract class Boleto implements BoletoInterface
             $barcodeGenerator->getBarcode($this->getCodigoBarras(), $barcodeGenerator::TYPE_INTERLEAVED_2_5)['bars'];
     }
 
+    /**
+     * @return array
+     */
     private function getAtributosParser()
     {
         return $this->atributos_parser;
     }
 
+    /**
+     * @param string $string
+     * @return string
+     */
     protected function parseAttributes($string)
     {
         foreach ($this->getAtributosParser() as $attribute)
@@ -197,6 +208,10 @@ abstract class Boleto implements BoletoInterface
         return $string;
     }
 
+    /**
+     * @param string $string
+     * @return $this
+     */
     public function adicionaDemonstrativo($string)
     {
         $this->demonstrativo_array[] = $this->parseAttributes($string);
@@ -204,6 +219,10 @@ abstract class Boleto implements BoletoInterface
         return $this;
     }
 
+    /**
+     * @param string $string
+     * @return $this
+     */
     public function adicionaInstrucao($string)
     {
         $this->instrucoes_array[] = $this->parseAttributes($string);
@@ -211,13 +230,25 @@ abstract class Boleto implements BoletoInterface
         return $this;
     }
 
-    abstract function getLinhaDigitavelFormatada();
+    /**
+     * @return string
+     */
+    public abstract function getLinhaDigitavelFormatada();
 
-    abstract function getNossoNumeroFormatado();
+    /**
+     * @return string
+     */
+    public abstract function getNossoNumeroFormatado();
 
-    abstract function getCodigoBarras();
+    /**
+     * @return string
+     */
+    public abstract function getCodigoBarras();
 
-    abstract function getAgenciaCodigoBeneficiarioDv();
+    /**
+     * @return string
+     */
+    public abstract function getAgenciaCodigoBeneficiarioDv();
 
 
 }

@@ -18,19 +18,19 @@ abstract class Boleto implements BoletoInfoInterface
         $this->attributes = $attributes;
     }
 
-    abstract function getDataVencimentoRecebida();
+    public abstract function getDataVencimentoRecebida();
 
-    abstract function getDataDocumento();
+    public abstract function getDataDocumento();
 
-    abstract function getDataProcessamento();
+    public abstract function getDataProcessamento();
 
-    abstract function getValorFinal($formatado10digitos = FALSE, $inteiro = FALSE);
+    public abstract function getValorFinal($formatado10digitos = FALSE, $inteiro = FALSE);
 
-    abstract function getDataVencimentoCalculada();
+    public abstract function getDataVencimentoCalculada();
 
-    abstract function getValorTaxa($valor_inteiro = FALSE);
+    public abstract function getValorTaxa($valor_inteiro = FALSE);
 
-    abstract function getValorMulta($valor_inteiro = FALSE);
+    public abstract function getValorMulta($valor_inteiro = FALSE);
 
     public function getNossoNumeroRecebido()
     {

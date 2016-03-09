@@ -10,8 +10,8 @@ class BancoCEF extends Banco
     protected $codigo_moeda = 9;
     protected $codigo_compensacao;
 
-    /*
-     * 2 Digitos ($modalidade_nosso_numero + $emissao_boleto)
+    /**
+     * 2 Digitos (modalidade_nosso_numero + emissao_boleto)
      */
     protected $nosso_numero_inicio;
 

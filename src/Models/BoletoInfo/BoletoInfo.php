@@ -23,12 +23,12 @@ class BoletoInfo extends Boleto
             $valor_cobrado += $this->getValorTaxa(TRUE) + $this->getValorMulta(TRUE);
         }
 
-        if ($formatado10digitos == TRUE)
+        if ($formatado10digitos === TRUE)
         {
             return Calculator::formataNumero($valor_cobrado, 10, 0);
         }
 
-        if ($inteiro == TRUE)
+        if ($inteiro === TRUE)
         {
             return $valor_cobrado;
         }

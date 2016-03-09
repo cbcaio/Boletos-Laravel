@@ -37,22 +37,17 @@ abstract class BarcodeGenerator
     {
         switch (strtoupper($type))
         {
-
             case self::TYPE_INTERLEAVED_2_5:
-            { // Interleaved 2 of 5
+                // Interleaved 2 of 5
                 $arrcode = $this->barcode_i25($code, FALSE);
                 break;
-            }
             case self::TYPE_INTERLEAVED_2_5_CHECKSUM:
-            { // Interleaved 2 of 5 + CHECKSUM
+                // Interleaved 2 of 5 + CHECKSUM
                 $arrcode = $this->barcode_i25($code, TRUE);
                 break;
-            }
             default:
-            {
                 $arrcode = FALSE;
                 break;
-            }
         }
 
         $arrcode = $this->convertBarcodeArrayToNewStyle($arrcode);
@@ -72,6 +67,7 @@ abstract class BarcodeGenerator
      */
     protected function barcode_i25($code, $checksum = FALSE)
     {
+        $chr = array();
         $chr['0'] = '11221';
         $chr['1'] = '21112';
         $chr['2'] = '12112';
@@ -104,7 +100,7 @@ abstract class BarcodeGenerator
         {
             $char_bar   = $code{$i};
             $char_space = $code{$i + 1};
-            if ((!isset($chr[ $char_bar ])) OR (!isset($chr[ $char_space ])))
+            if ((!isset($chr[ $char_bar ])) || (!isset($chr[ $char_space ])))
             {
                 // invalid character
                 return FALSE;
@@ -135,6 +131,7 @@ abstract class BarcodeGenerator
 
         return $bararray;
     }
+
     /**
      * Checksum for standard 2 of 5 barcodes.
      *
@@ -160,6 +157,7 @@ abstract class BarcodeGenerator
         {
             $r = (10 - $r);
         }
+
         return $r;
     }
 

@@ -11,7 +11,7 @@ abstract class Calculator
      * @param $numero
      * @return int
      */
-    static function calculaModulo11SemDV0($numero)
+    public static function calculaModulo11SemDV0($numero)
     {
         $soma_resultados = Calculator::getResultadoSomaModulo11($numero);
         $resto_divisao   = $soma_resultados % 11;
@@ -33,9 +33,10 @@ abstract class Calculator
      * @param $numero
      * @return int
      */
-    static function calculaModulo11($numero)
+    public static function calculaModulo11($numero)
     {
         $soma_resultados = Calculator::getResultadoSomaModulo11($numero);
+
         if ($soma_resultados < 11)
         {
             return 11 - $soma_resultados;
@@ -63,10 +64,9 @@ abstract class Calculator
      * @param $numero
      * @return int
      */
-    static function calculaModulo10($numero)
+    public static function calculaModulo10($numero)
     {
         $soma_resultados = Calculator::getResultadoSomaModulo10($numero);
-
         if ($soma_resultados < 10)
         {
             return 10 - $soma_resultados;
@@ -91,7 +91,7 @@ abstract class Calculator
      * @param string $insere
      * @return string
      */
-    static function formataNumero($numero, $tamanho, $insere)
+    public static function formataNumero($numero, $tamanho, $insere)
     {
         while (strlen($numero) < $tamanho)
         {
@@ -107,7 +107,7 @@ abstract class Calculator
      * @param $numero
      * @return string
      */
-    static function formataValor($numero)
+    public static function formataValor($numero)
     {
         $tamanho       = strlen($numero);
         $parte_decimal = substr($numero, $tamanho - 2, 2);
@@ -126,7 +126,7 @@ abstract class Calculator
      * @param integer $base
      * @return int
      */
-    static function calculaPercentual($percentual, $base)
+    public static function calculaPercentual($percentual, $base)
     {
         if ($percentual > 1)
         {
@@ -145,7 +145,7 @@ abstract class Calculator
      * @param int    $peso_inferior
      * @return number
      */
-    static function getResultadoSomaModulo10($numero, $peso_superior = 2, $peso_inferior = 1)
+    public static function getResultadoSomaModulo10($numero, $peso_superior = 2, $peso_inferior = 1)
     {
         $numero_array                  = str_split($numero, 1);
         $tamanho_numero_array          = count($numero_array);
@@ -185,7 +185,7 @@ abstract class Calculator
      * @param int    $peso_superior
      * @return number
      */
-    static function getResultadoSomaModulo11($numero, $peso_inferior = 2, $peso_superior = 9)
+    public static function getResultadoSomaModulo11($numero, $peso_inferior = 2, $peso_superior = 9)
     {
         $numero_array         = str_split($numero, 1);
         $tamanho_numero_array = count($numero_array);

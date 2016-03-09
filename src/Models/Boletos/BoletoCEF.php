@@ -216,33 +216,14 @@ class BoletoCEF extends Boleto
         $peso_inferior = 2;
         $peso_superior = 9;
 
-        if ($nosso_numero_sem_dv == NULL)
+        if ($nosso_numero_sem_dv === NULL)
         {
             $nosso_numero = $this->getNossoNumeroSemDV();
         } else
         {
             $nosso_numero = $nosso_numero_sem_dv;
         }
-
-        $numero_array         = str_split($nosso_numero, 1);
-        $tamanho_numero_array = count($numero_array);
-
-        $resultado_multiplicacao_array = [];
-
-        $multiplicador = $peso_inferior;
-        for ($i = $tamanho_numero_array - 1; $i >= 0; $i--)
-        {
-            $res_multiplicacao                   = $numero_array[ $i ] * $multiplicador;
-            $resultado_multiplicacao_array[ $i ] = $res_multiplicacao;
-            if ($multiplicador >= $peso_superior)
-            {
-                $multiplicador = $peso_inferior;
-            } else
-            {
-                $multiplicador++;
-            }
-        }
-        $soma_resultados = array_sum($resultado_multiplicacao_array);
+        $soma_resultados = Calculator::getResultadoSomaModulo11($nosso_numero);
         $resto_divisao   = $soma_resultados % 11;
         $valor_final     = 11 - $resto_divisao;
 
@@ -261,7 +242,7 @@ class BoletoCEF extends Boleto
      */
     public function calculaDVCodigoBeneficiario($codigo_beneficiario = NULL)
     {
-        if ($codigo_beneficiario == NULL)
+        if ($codigo_beneficiario === NULL)
         {
             return Calculator::calculaModulo11($this->beneficiario->getCodigoBeneficiario());
         } else
@@ -285,7 +266,7 @@ class BoletoCEF extends Boleto
      */
     public function calculaDVGeralCodigoBarras($codigo_barras_sem_dv = NULL)
     {
-        if ($codigo_barras_sem_dv == NULL)
+        if ($codigo_barras_sem_dv === NULL)
         {
             return Calculator::calculaModulo11SemDV0($this->getCodigoDeBarrasSemDV());
         } else
@@ -300,7 +281,7 @@ class BoletoCEF extends Boleto
      */
     public function calculaDVCampoLivre($campo_livre_sem_dv = NULL)
     {
-        if ($campo_livre_sem_dv == NULL)
+        if ($campo_livre_sem_dv === NULL)
         {
             return Calculator::calculaModulo11($this->getCampoLivreSemDV());
         } else
