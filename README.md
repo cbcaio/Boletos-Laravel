@@ -111,7 +111,7 @@ Por favor veja [CONTRIBUTING](CONTRIBUTING.md) e [CONDUCT](CONDUCT.md) para mais
 ## Segurança
 
 Se você encontrar algum problema relacionada a segurança do pacote, por favor relate o problema encontrado, me 
-mande um e-mail :author_email ou abra uma issue.
+mande um e-mail caio.bolognani@gmail.com ou abra uma issue.
 
 ## Credits
 
