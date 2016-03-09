@@ -2,7 +2,7 @@
     "name": "cbcaio/boletos-laravel",
     "description": "Uma abordagem orientada a objetos para criação de boletos em PHP, feito para laravel",
     "keywords": [
-        "cbcaio","caixa economica","geracao boletos","bancos","laravel","boletos"
+        "cbcaio","caixa economica","geracao","bancos","laravel","boletos", "php"
     ],
     "license": "GPL",
     "authors": [

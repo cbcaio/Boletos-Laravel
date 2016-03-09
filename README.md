@@ -6,158 +6,129 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-This package uses polymorphic relationships to easily attach images to models. Basically you just need to use one of 
-  the package's traits in your model and you are good to go(see Usage). What happens in the background is that the 
-  models are linked to the images by a MorphOne relationship and every time you persist a image 
-  into the associated table the file is written automatically using the selected driver (using [Flysystem]), or updated if 
-  needed.
+Pacote para geração de boletos, atualmente somente o boleto da Caixa Economica Federal está disponível. Documentação 
+em desenvolvimento.
 
-## Install
+## Como instalar
 
 ### 1 - Via Composer
 
-To get started with Image Attacher, add it to your `composer.json` file as a dependency:
+Basta adicionar ao `composer.json` a dependência:
 
 ``` bash
-$ composer require cbcaio/image-attacher
+$ composer require cbcaio/boletos-laravel
 ```
 
 ### 2 - Provider
 
-After installing the Image Attacher, register the `CbCaio\ImgAttacher\Providers\ImgAttacherServiceProvider` 
-in your configuration file (`config/app.php`):
+Após a instação é necessário inserir o provider no seu arquivo de configuração do laravel(`config/app.php`):
 
     'providers' => [
         // Other service providers...
 
-        CbCaio\ImgAttacher\Providers\ImgAttacherServiceProvider::class,
+        CbCaio\Boletos\Providers\BoletoServiceProvider::class,
     ],
     
 ### 3 - Configuration
 
-In order to publish the configuration files run the following command
+Para gerar o arquivo de configuração basta executar o comando artisan a seguir em seu terminal 
 
 ``` bash
 $ php artisan vendor:publish
 ```
     
-This command will create 3 new files:
+Este comando criará 1 arquivo :
  
- 1. `config/img-attacher.php` : this file holds the Image Attacher configurations. 
-     - `path_to_save`: defines where images will be saved, relatively to the driver and local specified in the 
-     `flysystem.php`. This path will be parsed before being used. The :`attribute` references information about the 
-     `attacherImage` model while the :`owner_class` and :`owner_id` are relative to the owner class of 
-     the relationship. These are needed to organize folders and also to certify that the right image will be 
-     deleted.
-     
-       IMPORTANT: This path should be exclusively used by the package, do not put other files in the same folder 
-       otherwise they can be deleted by mistake.
-     
-     - `processing_styles` and `processing_style_routines`: the 'routine' represents a sequence of 'styles' and its needed 
-     methods. Each 'style' saves a copy of the original image with the modifications specified in its method. They can
-      be used to save different versions of your original image automatically when you add an image to a model (the 
-      model can can have different 'versions'/'styles' of same image with only one relationship). 
-        - For example, the following code will save the original image and also a 'thumbnail 
-        version' of the same image in their respective parsed `path_to_save` with :`style` substituted by 
-        `original_style` and `thumbnail`:  
-          
-          ```
-             $model->addImage(uploaded_file,'default_routine');
-             ....
-              'default_routine' =>
-              [
-                  'original_style' => function ($image) {
-                      return $image;
-                  },
-                  'thumbnail' => function ($image) {
-                     $image->resize(null, 500, function ($constraint) {
-                         $constraint->aspectRatio();
-                         $constraint->upsize();
-                     });
-                     return $image;
-                  },
-              ]
-          ```
- 2. `database/migrations/2016_01_12_000000_create_attacher_images_table` : this is a migration file to create
-  the table which will hold the reference to your models in the MorthOne relationship and the information about the 
-  images.
-  
- 3. `config/flysystem.php` : this file is relative to the [Flysystem]. How and where your files will be written is 
- defined here. It is important to say that this package is only tested using the 'local' driver.
+ 1. `config/boletos.php` : Este arquivo é onde, opcionalmente, você pode configurar dados do beneficiario.
 
 ## Usage
 
-To start attaching images to your models you just need to use one of the available traits (currently only `hasImage`) in 
-the model.
+Para se começar a utilizar o pacote é preciso entender a composição de um boleto. Cada boleto carrega as seguintes 
+informações:
 
-     class RandomModel extends Model
-     {
-         use hasImage;
-     }
-
-### 1 - Basic of using the hasImage trait
-
-##### Adding and retrieving an image to the model from an uploaded file.
-
-    ```php
-        $upload = Input::file('image');
-        $model->addImage($upload);
-        ...
-        $image = $user->getImage();
-        // Path is relative
-        $image->getPath('original_style);
-        $image->getPath('thumbnail);
-        // Url includes full path
-        $image->getUrl('original_style);
-        $image->getUrl('thumbnail);
-    ```
+  1. Informações do Banco
+  2. Informações do Beneficiario
+  3. Informações do Pagador
+  4. Informações do Boleto (valor, data vencimento, etc)
   
-##### Adding another image
-    ```php
-        // The same as adding, the package will identify if the model already has an image, delete the previous 
-        images and update the relationship.
-        $upload = Input::file('image2');
-        $model->addImage($upload);
-    ```
-    
-##### Deleting image and all the its styles
-    ```php
-        $model->deleteImage();
-    ```
+  Portando, você tem a opção de preencher essas opções ao criar um boleto:
+
+     ...
+     $beneficiario = new BeneficiarioCEF(FALSE, // true para carregar do arquivo de configuração
+     [
+         'razao_social'  => "Razão Social da Empresa",
+         "agencia"       => "1234",
+         'cpf_cnpj'      => "12.123.123/0001-23",
+         'endereco'      => "Endereço da Empresa",
+         'cidade_estado' => "Ouro Fino / Minas Gerais",
+         'conta'         => '005507'
+     ]);
+     ...
+     $pagador      = new Pagador([
+         'nome'     => 'Tester',
+         'endereco' => 'Endereco do Pagador',
+         'cidade'   => 'Cidade',
+         'estado'   => 'Estado',
+         'cep'      => '37570-000',
+         'cpf_cnpj' => '12.123.123/0001-12'
+        ]
+     );
+     ...
+      $info = new BoletoInfo([
+             'nosso_numero'       => '222333777777777',
+             'aceite'             => 'NÃO',
+             'especie_doc'        => 'R$',
+             'numero_documento'   => '1581-7/001',
+             'data_documento'     => '2015-06-10',
+             'data_processamento' => '2015-06-10',
+             'data_vencimento'    => '2006-08-23',
+             'taxa'               => 0.0985,
+             'multa'              => 2,
+             'valor_base'         => 32112
+         ]
+      );
+     ... E finalmente
+     $boleto = new BoletoCEF(
+         new BancoCEF(1),
+         $beneficiario,
+         $pagador,
+         $info
+     );
+     $boleto->processaDados();
+     Neste ponto o boleto já está pronto para uso,
+     ...
 
 ## Change log
 
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+Por favor veja [CHANGELOG](CHANGELOG.md) para mais informações sobre as ultimas mudanças.
 
-## Contributing
+## Contribuindo
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) and [CONDUCT](CONDUCT.md) for details.
+Por favor veja [CONTRIBUTING](CONTRIBUTING.md) e [CONDUCT](CONDUCT.md) para mais detalhes.
 
-## Security
+## Segurança
 
-If you discover any security related issues, please email :author_email instead of using the issue tracker.
+Se você encontrar algum problema relacionada a segurança do pacote, por favor relate o problema encontrado, me 
+mande um e-mail :author_email ou abra uma issue.
 
 ## Credits
 
 - [CbCaio][link-author]
-- [vinicius73][link-vinicius]
 - [All Contributors][link-contributors]
 
-## License
+## Licensa
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The GPL License (GPL). Por favor veja [License File](LICENSE.md) para mais informações.
 
-[ico-version]: https://img.shields.io/packagist/v/CbCaio/Image-Attacher.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/CbCaio/Boletos-Laravel.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/CbCaio/Image-Attacher/master.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/CbCaio/Image-Attacher.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/CbCaio/Image-Attacher.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/CbCaio/Boletos-Laravel/master.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/CbCaio/Boletos-Laravel.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/CbCaio/Boletos-Laravel.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/CbCaio/Image-Attacher
-[link-travis]: https://travis-ci.org/CbCaio/Image-Attacher
-[link-code-quality]: https://scrutinizer-ci.com/g/CbCaio/Image-Attacher
-[link-downloads]: https://packagist.org/packages/CbCaio/Image-Attacher
+[link-packagist]: https://packagist.org/packages/CbCaio/Boletos-Laravel
+[link-travis]: https://travis-ci.org/CbCaio/Boletos-Laravel
+[link-code-quality]: https://scrutinizer-ci.com/g/CbCaio/Boletos-Laravel
+[link-downloads]: https://packagist.org/packages/CbCaio/Boletos-Laravel
 [link-author]: https://github.com/CbCaio
 [link-contributors]: ../../contributors
-[Flysystem]: https://github.com/GrahamCampbell/Laravel-Flysystem
-[link-vinicius]: https://github.com/vinicius73
