@@ -18,7 +18,6 @@
 // <http://www.tecnick.com/pagefiles/tcpdf/LICENSE.TXT>.
 //
 // See LICENSE.TXT file for more information.
-
 namespace CbCaio\Boletos\Generators\Base;
 
 abstract class BarcodeGenerator

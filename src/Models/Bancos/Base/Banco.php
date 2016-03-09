@@ -1,7 +1,13 @@
 <?php
+<<<<<<< HEAD:src/Models/Bancos/Base/Banco.php
 namespace CbCaio\Boletos\Models\Bancos\Base;
 
 use CbCaio\Boletos\Models\Bancos\Contracts\BancoInterface;
+=======
+namespace  CbCaio\Boletos\Models\Bancos\Base;
+
+use  CbCaio\Boletos\Models\Bancos\Contracts\BancoInterface;
+>>>>>>> 1d091278335013eb13ca290b6a861c9c987fbfea:src/Models/Banco/Base/Banco.php
 
 abstract class Banco implements BancoInterface
 {

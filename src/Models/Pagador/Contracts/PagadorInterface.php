@@ -1,6 +1,5 @@
 <?php
 namespace CbCaio\Boletos\Models\Pagador\Contracts;
-
 interface PagadorInterface
 {
     public function getNome();

@@ -1,7 +1,6 @@
 <?php
 namespace CbCaio\Boletos\Models\Beneficiario\Base;
-
-use CbCaio\Boletos\Models\Beneficiario\Contracts\BeneficiarioInterface;
+use  CbCaio\Boletos\Models\Beneficiario\Contracts\BeneficiarioInterface;
 
 abstract class Beneficiario implements BeneficiarioInterface
 {

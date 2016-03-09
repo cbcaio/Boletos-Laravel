@@ -1,9 +1,9 @@
 <?php
 namespace CbCaio\Boletos\Models\BoletoInfo;
 
-use CbCaio\Boletos\Calculators\Calculator;
 use Carbon\Carbon;
-use CbCaio\Boletos\Models\BoletoInfo\Base\Boleto;
+use CbCaio\Boletos\Calculators\Calculator;
+use CbCaio\Boletos\Models\BoletoInfo\Contracts\BoletoInfoInterface;
 
 class BoletoInfo extends Boleto
 {

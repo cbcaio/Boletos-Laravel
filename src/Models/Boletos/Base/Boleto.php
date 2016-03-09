@@ -1,12 +1,12 @@
 <?php
 namespace CbCaio\Boletos\Models\Boletos\Base;
 
-use CbCaio\Boletos\Generators\Barcode;
-use CbCaio\Boletos\Models\Bancos\Contracts\BancoInterface;
-use CbCaio\Boletos\Models\Beneficiario\Contracts\BeneficiarioInterface;
-use CbCaio\Boletos\Models\BoletoInfo\Contracts\BoletoInfoInterface;
-use CbCaio\Boletos\Models\Boletos\Contracts\BoletoInterface;
-use CbCaio\Boletos\Models\Pagador\Contracts\PagadorInterface;
+use  CbCaio\Boletos\Generators\Barcode;
+use  CbCaio\Boletos\Models\Bancos\Contracts\BancoInterface;
+use  CbCaio\Boletos\Models\Beneficiario\Contracts\BeneficiarioInterface;
+use  CbCaio\Boletos\Models\BoletoInfo\Contracts\BoletoInfoInterface;
+use  CbCaio\Boletos\Models\Boletos\Contracts\BoletoInterface;
+use  CbCaio\Boletos\Models\Pagador\Contracts\PagadorInterface;
 use Carbon\Carbon;
 
 abstract class Boleto implements BoletoInterface
