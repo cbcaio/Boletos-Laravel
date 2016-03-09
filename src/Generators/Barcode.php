@@ -6,7 +6,7 @@ use CbCaio\Boletos\Generators\Base\BarcodeGenerator;
 
 class Barcode extends BarcodeGenerator
 {
-    public function getBarcode($code, $type, $widthFactor = 1, $totalHeight = 50)
+    public function getBarcode($code, $type)
     {
         $barcodeData = $this->getBarcodeData($code, $type);
         return $barcodeData;
