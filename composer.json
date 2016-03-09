@@ -1,12 +1,9 @@
 {
     "name": "cbcaio/boletos-laravel",
-<<<<<<< HEAD
-    "description": "Gere boletos para impressão de maneira fácil e organizada",
+    "description": "Uma abordagem orientada a objetos para criação de boletos em PHP, feito para laravel",
     "keywords": [
         "cbcaio","caixa economica","geracao boletos","bancos","laravel","boletos"
     ],
-=======
->>>>>>> 1d091278335013eb13ca290b6a861c9c987fbfea
     "license": "GPL",
     "authors": [
         {
