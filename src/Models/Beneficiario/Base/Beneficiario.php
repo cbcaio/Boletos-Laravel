@@ -5,47 +5,51 @@ use CbCaio\Boletos\Models\Beneficiario\Contracts\BeneficiarioInterface;
 
 abstract class Beneficiario implements BeneficiarioInterface
 {
-    protected $razao_social;
-    protected $conta;
-    protected $agencia;
-    protected $carteira;
-    protected $cpf_cnpj;
-    protected $endereco;
-    protected $cidade_estado;
+    /**
+     * All of the user's attributes.
+     *
+     * @var array
+     */
+    protected $attributes;
+
+    public function __construct(array $attributes)
+    {
+        $this->attributes = $attributes;
+    }
 
     public function getRazaoSocial()
     {
-        return $this->razao_social;
+        return $this->attributes['razao_social'];
     }
 
     public function getConta()
     {
-        return $this->conta;
+        return $this->attributes['conta'];
     }
 
     public function getAgencia()
     {
-        return $this->agencia;
+        return $this->attributes['agencia'];
     }
 
     public function getCarteira()
     {
-        return $this->carteira;
+        return $this->attributes['carteira'];
     }
 
     public function getCpfCnpj()
     {
-        return $this->cpf_cnpj;
+        return $this->attributes['cpf_cnpj'];
     }
 
     public function getEndereco()
     {
-        return $this->endereco;
+        return $this->attributes['endereco'];
     }
 
     public function getCidadeEstado()
     {
-        return $this->cidade_estado;
+        return $this->attributes['cidade_estado'];
     }
 
 }

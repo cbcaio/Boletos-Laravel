@@ -6,17 +6,12 @@ use CbCaio\Boletos\Models\Beneficiario\Base\Beneficiario;
 
 class BeneficiarioCEF extends Beneficiario
 {
-    public function __construct()
+    public function __construct($load_from_config = true, array $attributes = null)
     {
-        $config = config('boletos');
-        $this->razao_social  = $config['razao_social'];
-        $this->endereco      = $config['endereco'];
-        $this->cpf_cnpj      = $config['cpf_cnpj'];
-        $this->cidade_estado = $config['cidade_estado'];
-
-        $this->agencia  = $config['agencia'];
-        $this->conta    = $config['conta'];
-        $this->carteira = $config['carteira'];
+        if ($load_from_config)
+            parent::__construct(config('boletos'));
+        else
+            parent::__construct($attributes);
     }
 
     /*

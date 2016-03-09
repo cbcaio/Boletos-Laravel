@@ -4,9 +4,9 @@ namespace CbCaio\Boletos\Calculators;
 abstract class Calculator
 {
     /*
-     * Cálcula o modulo de 11, porém em alguns casos o DV Geral não pode ser 0, então está função trata isso da
+     * Calcula o modulo de 11, porem em alguns casos o DV Geral nao pode ser 0, entao esta funcao trata isso da
      * seguinte forma:
-     *  SE RESULTADO = 0  OU RESULTADO > 9 ENTÃO DV = 1
+     *  SE RESULTADO = 0  OU RESULTADO > 9 ENTAO DV = 1
      */
     static function calculaModulo11SemDV0($numero)
     {
@@ -25,7 +25,7 @@ abstract class Calculator
 
     /*
      * Calcula o modulo de 11, neste caso fazendo:
-     * SE RESULTADO > 9 ENTÃO DV = 0
+     * SE RESULTADO > 9 ENTÃƒO DV = 0
      */
     static function calculaModulo11($numero)
     {
@@ -50,9 +50,9 @@ abstract class Calculator
 
     /*
      * Calcula o modulo de 10, neste caso fazendo:
-     * Quando o resultado da multiplicação for um número com 2 dígitos, somar os 2 algarismos
-     * Se o Total da Soma for inferior a 10, o DV corresponde à diferença entre 10 e o Total da Soma
-     * Se o resto da divisão for 0 (zero), o DV será 0 (zero)
+     * Quando o resultado da multiplicaï¿½ï¿½o for um nï¿½mero com 2 dï¿½gitos, somar os 2 algarismos
+     * Se o Total da Soma for inferior a 10, o DV corresponde ï¿½ diferenï¿½a entre 10 e o Total da Soma
+     * Se o resto da divisï¿½o for 0 (zero), o DV serï¿½ 0 (zero)
      */
     static function calculaModulo10($numero)
     {
@@ -75,7 +75,7 @@ abstract class Calculator
     }
 
     /*
-     * Formata um número inserindo o valor desejado a esquerda até que o tamanho seja igual a quantidade informada
+     * Formata um nï¿½mero inserindo o valor desejado a esquerda atï¿½ que o tamanho seja igual a quantidade informada
      */
     static function formataNumero($numero, $tamanho, $insere)
     {
@@ -88,7 +88,7 @@ abstract class Calculator
     }
 
     /*
-     * Formata um número colocando virgulas nos decimais e zeros.
+     * Formata um nï¿½mero colocando virgulas nos decimais e zeros.
      */
     static function formataValor($numero)
     {
@@ -105,7 +105,7 @@ abstract class Calculator
     }
 
     /**
-     * @param mixed $percentual Valor em % ou já divido por 100
+     * @param mixed $percentual Valor em % ou jï¿½ divido por 100
      * @param integer $base
      * @return int
      */
@@ -121,7 +121,7 @@ abstract class Calculator
     }
 
     /*
-     * Função auxiliar para calculo do modulo de 10, faz a soma dos digitos dado os pesos.
+     * Funcaoo auxiliar para calculo do modulo de 10, faz a soma dos digitos dado os pesos.
      */
     /**
      * @param string $numero
@@ -162,7 +162,7 @@ abstract class Calculator
     }
 
     /*
-     * Função auxiliar para calculo do modulo de 11, faz a soma dos digitos dado os pesos.
+     * Funcaoo auxiliar para calculo do modulo de 11, faz a soma dos digitos dado os pesos.
      */
     /**
      * @param string $numero
@@ -181,7 +181,6 @@ abstract class Calculator
         for ($i = $tamanho_numero_array - 1; $i >= 0; $i--)
         {
             $res_multiplicacao = $numero_array[ $i ] * $multiplicador;
-
             $resultado_multiplicacao_array[ $i ] = $res_multiplicacao;
             if ($multiplicador >= $peso_superior)
             {
@@ -191,7 +190,6 @@ abstract class Calculator
                 $multiplicador++;
             }
         }
-
         return array_sum($resultado_multiplicacao_array);
     }
 }

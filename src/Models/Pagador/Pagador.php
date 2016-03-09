@@ -1,45 +1,50 @@
 <?php
-namespace CbCaio\Boletos\Models\Pagador\Base;
+namespace CbCaio\Boletos\Models\Pagador;
 
 use CbCaio\Boletos\Models\Pagador\Contracts\PagadorInterface;
 
 class Pagador implements PagadorInterface
 {
-    protected $nome;
-    protected $endereco;
-    protected $cidade;
-    protected $estado;
-    protected $cep;
-    protected $cpf_cnpj;
+    /**
+     * All of the user's attributes.
+     *
+     * @var array
+     */
+    protected $attributes;
+
+    public function __construct(array $attributes)
+    {
+        $this->attributes = $attributes;
+    }
 
     public function getNome()
     {
-        return $this->nome;
+        return $this->attributes['nome'];
     }
 
     public function getEndereco()
     {
-        return $this->endereco;
+        return $this->attributes['endereco'];
     }
 
     public function getCidade()
     {
-        return $this->cidade;
+        return $this->attributes['cidade'];
     }
 
     public function getEstado()
     {
-        return $this->estado;
+        return $this->attributes['estado'];
     }
 
     public function getCep()
     {
-        return $this->cep;
+        return $this->attributes['cep'];
     }
 
     public function getCpfCnpj()
     {
-        return $this->cpf_cnpj;
+        return $this->attributes['cpf_cnpj'];
     }
 
     public function getCidadeEstadoCep()

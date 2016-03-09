@@ -82,7 +82,8 @@ interface BoletoInfoInterface
 
     /**
      * @return string|integer
-     */public function getValorFinal($formatado10digitos = FALSE, $inteiro = FALSE);
+     */
+    public function getValorFinal($formatado10digitos = FALSE, $inteiro = FALSE);
 
     /**
      * @param bool|FALSE $valor_inteiro

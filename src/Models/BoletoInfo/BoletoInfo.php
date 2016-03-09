@@ -2,110 +2,12 @@
 namespace CbCaio\Boletos\Models\BoletoInfo;
 
 use CbCaio\Boletos\Calculators\Calculator;
-use CbCaio\Boletos\Models\BoletoInfo\Contracts\BoletoInfoInterface;
 use Carbon\Carbon;
+use CbCaio\Boletos\Models\BoletoInfo\Base\Boleto;
 
-class BoletoInfo implements BoletoInfoInterface
+class BoletoInfo extends Boleto
 {
-    /**
-     * All of the user's attributes.
-     *
-     * @var array
-     */
-    protected $attributes;
-
-    public function __construct(array $attributes)
-    {
-        $this->attributes = $attributes;
-    }
-
-    public function getDataVencimentoRecebida()
-    {
-        if (isset($this->attributes['data_vencimento']))
-        {
-            return Carbon::createFromFormat('d/m/Y', $this->attributes['data_vencimento']);
-        } else
-        {
-            return NULL;
-        }
-    }
-
-    public function getNossoNumeroRecebido()
-    {
-        return $this->attributes['nosso_numero'];
-    }
-
-    public function getAceite()
-    {
-        return $this->attributes['aceite'];
-    }
-
-    public function getEspecieDoc()
-    {
-        return $this->attributes['especie_doc'];
-    }
-
-    public function getNomeSacado()
-    {
-        return $this->attributes['nome_sacado'];
-    }
-
-    public function getCpfCnpjSacado()
-    {
-        return $this->attributes['cpf_cnpj_sacado'];
-    }
-
-    public function getEspecieMoeda()
-    {
-        return $this->attributes['especie'];
-    }
-
-    public function getNumeroDocumento()
-    {
-        return $this->attributes['numero_documento'];
-    }
-
-    public function getDataDocumento()
-    {
-        if (isset($this->attributes['data_documento']))
-        {
-            return Carbon::createFromFormat('d/m/Y', $this->attributes['data_documento']);
-        } else
-        {
-            return NULL;
-        }
-    }
-
-    public function getDataProcessamento()
-    {
-        if (isset($this->attributes['data_processamento']))
-        {
-            return Carbon::createFromFormat('d/m/Y', $this->attributes['data_processamento']);
-        } else
-        {
-            return NULL;
-        }
-    }
-
-    public function getDiasParaPagar()
-    {
-        return $this->attributes['dias_para_pagar'];
-    }
-
-    public function getTaxaPercentual()
-    {
-        return $this->attributes['taxa'];
-    }
-
-    public function getMultaPercentual()
-    {
-        return $this->attributes['multa'];
-    }
-
-    public function getValorBase()
-    {
-        return $this->attributes['valor_base'];
-    }
+    protected $date_format = 'Y-m-d';
 
     public function getValorFinal($formatado10digitos = FALSE, $inteiro = FALSE)
     {
@@ -136,7 +38,8 @@ class BoletoInfo implements BoletoInfoInterface
 
     public function getDataVencimentoCalculada()
     {
-        if ($this->getDataVencimentoRecebida() instanceof Carbon)
+
+        if ($this->getDataVencimentoRecebida())
         {
             return $this->getDataVencimentoRecebida();
         } else
@@ -149,7 +52,6 @@ class BoletoInfo implements BoletoInfoInterface
             {
                 $data_documento  = $this->getDataDocumento();
                 $data_vencimento = $data_documento->addDay($dias_para_pagar);
-
                 return $data_vencimento;
             }
         }
@@ -179,5 +81,48 @@ class BoletoInfo implements BoletoInfoInterface
         }
     }
 
+    /**
+     * @return Carbon|null
+     */
+    public function getDataVencimentoRecebida()
+    {
+        if (isset($this->attributes['data_vencimento']))
+        {
+            return Carbon::createFromFormat($this->date_format, $this->attributes['data_vencimento'])
+                ->setTime(0,0,0);
+        } else
+        {
+            return NULL;
+        }
 
+     /**
+     * @return Carbon|null
+     */  }
+
+    public function getDataDocumento()
+    {
+        if (isset($this->attributes['data_documento']))
+        {
+            return Carbon::createFromFormat($this->date_format, $this->attributes['data_documento'])
+                ->setTime(0,0,0);
+        } else
+        {
+            return NULL;
+        }
+
+    /**
+     * @return Carbon|null
+     */  }
+
+    public function getDataProcessamento()
+    {
+        if (isset($this->attributes['data_processamento']))
+        {
+            return Carbon::createFromFormat($this->date_format, $this->attributes['data_processamento'])
+                ->setTime(0,0,0);
+        } else
+        {
+            return NULL;
+        }
+    }
 }
