@@ -65,5 +65,4 @@ class BoletoServiceProvider extends ServiceProvider
         $this->app->bind('CbCaio\Boletos\Models\Pagador\Contracts\PagadorInterface',
                          'CbCaio\Boletos\Models\Pagador\Pagador');
     }
-
 }

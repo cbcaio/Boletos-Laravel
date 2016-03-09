@@ -203,14 +203,14 @@ class BoletoTest extends AbstractTestCase
     public function codigo_de_barras_esta_sendo_calculado_corretamente()
     {
         $beneficiario = new BeneficiarioCEF(FALSE,
-                                            [
-                                                'razao_social'  => "Razão Social da Empresa",
-                                                "agencia"       => "1234",
-                                                'cpf_cnpj'      => "12.123.123/0001-23",
-                                                'endereco'      => "Endereço da Empresa",
-                                                'cidade_estado' => "Ouro Fino / Minas Gerais",
-                                                'conta'         => '005507'
-                                            ]);
+        [
+            'razao_social'  => "Razão Social da Empresa",
+            "agencia"       => "1234",
+            'cpf_cnpj'      => "12.123.123/0001-23",
+            'endereco'      => "Endereço da Empresa",
+            'cidade_estado' => "Ouro Fino / Minas Gerais",
+            'conta'         => '005507'
+        ]);
         $pagador      = new Pagador(
             [
                 'nome'     => 'Tester',

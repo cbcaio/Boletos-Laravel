@@ -231,9 +231,9 @@ abstract class BarcodeGenerator
      * CODE 39 - ANSI MH10.8M-1983 - USD-3 - 3 of 9.
      * General-purpose code in very wide use world-wide
      *
-     * @param $code     (string) code to represent.
-     * @param $extended (boolean) if true uses the extended mode.
-     * @param $checksum (boolean) if true add a checksum to the code.
+     * @param string $code     (string) code to represent.
+     * @param        $extended (boolean) if true uses the extended mode.
+     * @param        $checksum (boolean) if true add a checksum to the code.
      * @return array barcode representation.
      * @protected
      */
@@ -345,7 +345,7 @@ abstract class BarcodeGenerator
      * Encode a string to be used for CODE 39 Extended mode.
      *
      * @param string $code code to represent.
-     * @return bool|string encoded string.
+     * @return false|string encoded string.
      * @protected
      */
     protected function encode_code39_ext($code)
@@ -564,7 +564,7 @@ abstract class BarcodeGenerator
      * CODE 93 - USS-93
      * Compact code similar to Code 39
      *
-     * @param $code (string) code to represent.
+     * @param string $code (string) code to represent.
      * @return array barcode representation.
      * @protected
      */
@@ -799,7 +799,7 @@ abstract class BarcodeGenerator
     /**
      * Calculate CODE 93 checksum (modulo 47).
      *
-     * @param $code (string) code to represent.
+     * @param string $code (string) code to represent.
      * @return string checksum code.
      * @protected
      */
@@ -898,7 +898,7 @@ abstract class BarcodeGenerator
     /**
      * Checksum for standard 2 of 5 barcodes.
      *
-     * @param $code (string) code to process.
+     * @param string $code (string) code to process.
      * @return int checksum.
      * @protected
      */
@@ -929,8 +929,8 @@ abstract class BarcodeGenerator
      * Variation of Plessey code, with similar applications
      * Contains digits (0 to 9) and encodes the data only in the width of bars.
      *
-     * @param $code     (string) code to represent.
-     * @param $checksum (boolean) if true add a checksum to the code (modulo 11)
+     * @param string $code     (string) code to represent.
+     * @param        $checksum (boolean) if true add a checksum to the code (modulo 11)
      * @return array barcode representation.
      * @protected
      */
@@ -997,8 +997,8 @@ abstract class BarcodeGenerator
      * Used in airline ticket marking, photofinishing
      * Contains digits (0 to 9) and encodes the data only in the width of bars.
      *
-     * @param $code     (string) code to represent.
-     * @param $checksum (boolean) if true add a checksum to the code
+     * @param string $code     (string) code to represent.
+     * @param        $checksum (boolean) if true add a checksum to the code
      * @return array barcode representation.
      * @protected
      */
@@ -1083,8 +1083,8 @@ abstract class BarcodeGenerator
      * Compact numeric code, widely used in industry, air cargo
      * Contains digits (0 to 9) and encodes the data in the width of both bars and spaces.
      *
-     * @param $code     (string) code to represent.
-     * @param $checksum (boolean) if true add a checksum to the code
+     * @param string $code     (string) code to represent.
+     * @param        $checksum (boolean) if true add a checksum to the code
      * @return array barcode representation.
      * @protected
      */
@@ -1158,8 +1158,8 @@ abstract class BarcodeGenerator
      * C128 barcodes.
      * Very capable code, excellent density, high reliability; in very wide use world-wide
      *
-     * @param $code (string) code to represent.
-     * @param $type (string) barcode type: A, B, C or empty for automatic switch (AUTO mode)
+     * @param string $code (string) code to represent.
+     * @param        $type (string) barcode type: A, B, C or empty for automatic switch (AUTO mode)
      * @return array barcode representation.
      * @protected
      */
@@ -1550,7 +1550,7 @@ abstract class BarcodeGenerator
     /**
      * Split text code in A/B sequence for 128 code
      *
-     * @param $code (string) code to split.
+     * @param string $code (string) code to split.
      * @return array sequence
      * @protected
      */
@@ -1600,8 +1600,8 @@ abstract class BarcodeGenerator
      * UPC-A: Universal product code seen on almost all retail products in the USA and Canada
      * UPC-E: Short version of UPC symbol
      *
-     * @param $code (string) code to represent.
-     * @param $len  (string) barcode type: 6 = UPC-E, 8 = EAN8, 13 = EAN13, 12 = UPC-A
+     * @param string $code (string) code to represent.
+     * @param        $len  (string) barcode type: 6 = UPC-E, 8 = EAN8, 13 = EAN13, 12 = UPC-A
      * @return array barcode representation.
      * @protected
      */
@@ -1827,8 +1827,8 @@ abstract class BarcodeGenerator
      * 2-Digit Ext.: Used to indicate magazines and newspaper issue numbers
      * 5-Digit Ext.: Used to mark suggested retail price of books
      *
-     * @param $code (string) code to represent.
-     * @param $len  (string) barcode type: 2 = 2-Digit, 5 = 5-Digit
+     * @param string $code (string) code to represent.
+     * @param        $len  (string) barcode type: 2 = 2-Digit, 5 = 5-Digit
      * @return array barcode representation.
      * @protected
      */
@@ -1911,9 +1911,9 @@ abstract class BarcodeGenerator
      * POSTNET and PLANET barcodes.
      * Used by U.S. Postal Service for automated mail sorting
      *
-     * @param $code   (string) zip code to represent. Must be a string containing a zip code of the form DDDDD or
-     *                DDDDD-DDDD.
-     * @param $planet (boolean) if true print the PLANET barcode, otherwise print POSTNET
+     * @param string $code   (string) zip code to represent. Must be a string containing a zip code of the form DDDDD or
+     *                       DDDDD-DDDD.
+     * @param        $planet (boolean) if true print the PLANET barcode, otherwise print POSTNET
      * @return array barcode representation.
      * @protected
      */
@@ -1994,9 +1994,11 @@ abstract class BarcodeGenerator
      * RMS4CC (Royal Mail 4-state Customer Code) - CBC (Customer Bar Code) - KIX (Klant index - Customer index)
      * RM4SCC is the name of the barcode symbology used by the Royal Mail for its Cleanmail service.
      *
-     * @param $code (string) code to print
-     * @param $kix  (boolean) if true prints the KIX variation (doesn't use the start and end symbols, and the checksum)
-     *              - in this case the house number must be sufficed with an X and placed at the end of the code.
+     * @param string $code (string) code to print
+     * @param        $kix  (boolean) if true prints the KIX variation (doesn't use the start and end symbols, and the
+     *                     checksum)
+     *                     - in this case the house number must be sufficed with an X and placed at the end of the
+     *                     code.
      * @return array barcode representation.
      * @protected
      */
@@ -2161,7 +2163,7 @@ abstract class BarcodeGenerator
      * CODABAR barcodes.
      * Older code often used in library systems, sometimes in blood banks
      *
-     * @param $code (string) code to represent.
+     * @param string $code (string) code to represent.
      * @return array barcode representation.
      * @protected
      */
@@ -2225,7 +2227,7 @@ abstract class BarcodeGenerator
      * CODE11 barcodes.
      * Used primarily for labeling telecommunications equipment
      *
-     * @param $code (string) code to represent.
+     * @param string $code (string) code to represent.
      * @return array barcode representation.
      * @protected
      */
@@ -2334,7 +2336,7 @@ abstract class BarcodeGenerator
      * Pharmacode
      * Contains digits (0 to 9)
      *
-     * @param $code (string) code to represent.
+     * @param string $code (string) code to represent.
      * @return array barcode representation.
      * @protected
      */
@@ -2366,7 +2368,7 @@ abstract class BarcodeGenerator
      * Pharmacode two-track
      * Contains digits (0 to 9)
      *
-     * @param $code (string) code to represent.
+     * @param string $code (string) code to represent.
      * @return array barcode representation.
      * @protected
      */
@@ -2457,8 +2459,8 @@ abstract class BarcodeGenerator
      * 0, 5, 9, or 11 digits. The allowable encoding ranges shall be no ZIP Code, 00000–99999,  000000000–999999999,
      * and 00000000000–99999999999.</li></ul>
      *
-     * @param $code (string) code to print, separate the ZIP (routing code) from the rest using a minus char '-'
-     *              (BarcodeID_ServiceTypeID_MailerID_SerialNumber-RoutingCode)
+     * @param string $code (string) code to print, separate the ZIP (routing code) from the rest using a minus char '-'
+     *                     (BarcodeID_ServiceTypeID_MailerID_SerialNumber-RoutingCode)
      * @return array barcode representation.
      * @protected
      */
@@ -2868,7 +2870,7 @@ abstract class BarcodeGenerator
     /**
      * IMB - Intelligent Mail Barcode - Onecode - USPS-B-3200
      *
-     * @param $code (string) pre-formatted IMB barcode (65 chars "FADT")
+     * @param string $code (string) pre-formatted IMB barcode (65 chars "FADT")
      * @return array barcode representation.
      * @protected
      */
@@ -2979,7 +2981,7 @@ abstract class BarcodeGenerator
     /**
      * Intelligent Mail Barcode calculation of Frame Check Sequence
      *
-     * @param $code_arr (string) array of hexadecimal values (13 bytes holding 102 bits right justified).
+     * @param string $code_arr (string) array of hexadecimal values (13 bytes holding 102 bits right justified).
      * @return int 11 bit Frame Check Sequence as integer (decimal base)
      * @protected
      */

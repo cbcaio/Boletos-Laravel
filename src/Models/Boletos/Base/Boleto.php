@@ -7,7 +7,6 @@ use  CbCaio\Boletos\Models\Beneficiario\Contracts\BeneficiarioInterface;
 use  CbCaio\Boletos\Models\BoletoInfo\Contracts\BoletoInfoInterface;
 use  CbCaio\Boletos\Models\Boletos\Contracts\BoletoInterface;
 use  CbCaio\Boletos\Models\Pagador\Contracts\PagadorInterface;
-use Carbon\Carbon;
 
 abstract class Boleto implements BoletoInterface
 {
@@ -182,14 +181,14 @@ abstract class Boleto implements BoletoInterface
                 switch ($attribute)
                 {
                     case ":taxa":
-                        $string = preg_replace("/$attribute" . '\b/', $this->getValorTaxa(), $string);
+                        $string = preg_replace("/$attribute" . '\b/', $this->info->getValorTaxa(), $string);
                         break;
                     case ":multa":
-                        $string = preg_replace("/$attribute" . '\b/', $this->getValorMulta(), $string);
+                        $string = preg_replace("/$attribute" . '\b/', $this->info->getValorMulta(), $string);
                         break;
                     case ":vencimento":
-                        $string = preg_replace("/$attribute" . '\b/', $this->info->getDataVencimentoCalculada(),
-                                               $string);
+                        $string = preg_replace("/$attribute" . '\b/',
+                                               $this->info->getDataVencimentoCalculada(), $string);
                         break;
                 }
             }
@@ -219,7 +218,6 @@ abstract class Boleto implements BoletoInterface
     abstract function getCodigoBarras();
 
     abstract function getAgenciaCodigoBeneficiarioDv();
-
 
 
 }

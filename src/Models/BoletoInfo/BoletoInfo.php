@@ -52,6 +52,7 @@ class BoletoInfo extends Boleto
             {
                 $data_documento  = $this->getDataDocumento();
                 $data_vencimento = $data_documento->addDay($dias_para_pagar);
+
                 return $data_vencimento;
             }
         }
@@ -89,37 +90,38 @@ class BoletoInfo extends Boleto
         if (isset($this->attributes['data_vencimento']))
         {
             return Carbon::createFromFormat($this->date_format, $this->attributes['data_vencimento'])
-                ->setTime(0,0,0);
+                         ->setTime(0, 0, 0);
         } else
         {
             return NULL;
         }
+    }
 
-     /**
+    /**
      * @return Carbon|null
-     */  }
-
+     */
     public function getDataDocumento()
     {
         if (isset($this->attributes['data_documento']))
         {
             return Carbon::createFromFormat($this->date_format, $this->attributes['data_documento'])
-                ->setTime(0,0,0);
+                         ->setTime(0, 0, 0);
         } else
         {
             return NULL;
         }
 
-    /**
-     * @return Carbon|null
-     */  }
+        /**
+         * @return Carbon|null
+         */
+    }
 
     public function getDataProcessamento()
     {
         if (isset($this->attributes['data_processamento']))
         {
             return Carbon::createFromFormat($this->date_format, $this->attributes['data_processamento'])
-                ->setTime(0,0,0);
+                         ->setTime(0, 0, 0);
         } else
         {
             return NULL;

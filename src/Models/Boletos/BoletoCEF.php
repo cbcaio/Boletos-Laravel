@@ -186,7 +186,7 @@ class BoletoCEF extends Boleto
     }
 
     /**
-     * @param Carbon|string $data_vencimento
+     * @param Carbon $data_vencimento
      * @return string
      */
     public function calculaFatorVencimento($data_vencimento)
@@ -387,6 +387,6 @@ class BoletoCEF extends Boleto
         $agencia             = $this->beneficiario->getAgencia();
         $dv                  = $this->calculaDVCodigoBeneficiario($codigo_beneficiario);
 
-        return $agencia . ' / ' . $codigo_beneficiario . '-' .$dv;
+        return $agencia . ' / ' . $codigo_beneficiario . '-' . $dv;
     }
 }
