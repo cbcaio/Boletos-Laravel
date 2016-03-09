@@ -3,7 +3,7 @@ namespace CbCaio\Boletos\Models\BoletoInfo;
 
 use Carbon\Carbon;
 use CbCaio\Boletos\Calculators\Calculator;
-use CbCaio\Boletos\Models\BoletoInfo\Contracts\BoletoInfoInterface;
+use CbCaio\Boletos\Models\BoletoInfo\Base\Boleto;
 
 class BoletoInfo extends Boleto
 {

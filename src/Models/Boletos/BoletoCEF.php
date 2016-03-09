@@ -13,6 +13,12 @@ class BoletoCEF extends Boleto
 {
     protected $date_format = 'Y-m-d';
 
+    /**
+     * @param BancoCEF        $banco
+     * @param BeneficiarioCEF $beneficiario
+     * @param Pagador         $pagador
+     * @param BoletoInfo      $info
+     */
     public function __construct(
         BancoCEF $banco,
         BeneficiarioCEF $beneficiario,

@@ -1,15 +1,8 @@
 <?php
-<<<<<<< HEAD:src/Models/Bancos/BancoCEF.php
 namespace CbCaio\Boletos\Models\Bancos;
 
 use CbCaio\Boletos\Calculators\Calculator;
 use CbCaio\Boletos\Models\Bancos\Base\Banco;
-=======
-namespace  CbCaio\Boletos\Models\Bancos;
-
-use  CbCaio\Boletos\Calculators\Calculator;
-use  CbCaio\Boletos\Models\Bancos\Base\Banco;
->>>>>>> 1d091278335013eb13ca290b6a861c9c987fbfea:src/Models/Banco/CaixaEconomicaFederal.php
 
 class BancoCEF extends Banco
 {
