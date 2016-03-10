@@ -29,7 +29,7 @@ Após a instação é necessário inserir o provider no seu arquivo de configura
         CbCaio\Boletos\Providers\BoletoServiceProvider::class,
     ],
     
-### 3 - Configuration
+### 3 - Configuração
 
 Para gerar o arquivo de configuração basta executar o comando artisan a seguir em seu terminal 
 
@@ -43,7 +43,7 @@ Este comando criará 1 arquivo :
 
 ## Usage
 
-Para se começar a utilizar o pacote é preciso entender a composição de um boleto. Cada boleto carrega as seguintes 
+Para começar a utilizar o pacote é preciso entender a composição de um boleto. Cada boleto carrega as seguintes 
 informações:
 
   1. Informações do Banco
@@ -51,53 +51,50 @@ informações:
   3. Informações do Pagador
   4. Informações do Boleto (valor, data vencimento, etc)
   
-  Portando, você tem a opção de preencher essas opções ao criar um boleto:
+  Portanto, inicialmente você precisará fornecer esses dados. Segue um exemplo real de utilização em um controller:
   
   ```
-     ...
-     $beneficiario = new BeneficiarioCEF(FALSE, // true para carregar do arquivo de configuração
-     [
-         'razao_social'  => "Razão Social da Empresa",
-         "agencia"       => "1234",
-         'cpf_cnpj'      => "12.123.123/0001-23",
-         'endereco'      => "Endereço da Empresa",
-         'cidade_estado' => "Ouro Fino / Minas Gerais",
-         'conta'         => '005507'
-     ]);
-     ...
-     $pagador      = new Pagador([
-         'nome'     => 'Tester',
-         'endereco' => 'Endereco do Pagador',
-         'cidade'   => 'Cidade',
-         'estado'   => 'Estado',
-         'cep'      => '37570-000',
-         'cpf_cnpj' => '12.123.123/0001-12'
-        ]
-     );
-     ...
-      $info = new BoletoInfo([
-             'nosso_numero'       => '222333777777777',
-             'aceite'             => 'NÃO',
-             'especie_doc'        => 'R$',
-             'numero_documento'   => '1581-7/001',
-             'data_documento'     => '2015-06-10',
-             'data_processamento' => '2015-06-10',
-             'data_vencimento'    => '2006-08-23',
-             'taxa'               => 0.0985,
-             'multa'              => 2,
-             'valor_base'         => 32112
-         ]
-      );
-     ... E finalmente
-     $boleto = new BoletoCEF(
-         new BancoCEF(1),
-         $beneficiario,
-         $pagador,
-         $info
-     );
-     $boleto->processaDados();
-     Neste ponto o boleto já está pronto para uso,
-     ...
+     public function generate($boleto)
+    {
+        $beneficiario = new BeneficiarioCEF();
+        $owner        = $boleto->owner; // Relação com o usuário pagador
+        $pagador      = new Pagador(
+            [
+                'nome'     => $owner->codigo_cliente .' - ' . $owner->nome . ' - ' .$owner->cpf_cnpj,
+                'endereco' => $owner->endereco,
+                'cidade'   => $owner->cidade,
+                'estado'   => $owner->estado,
+                'cep'      => $owner->cep,
+                'cpf_cnpj' => $owner->cpf_cnpj
+            ]
+        );
+
+        $info = new BoletoInfo(
+            [
+                "numero_documento"   => $boleto->numero_documento,
+                "nosso_numero"       => $boleto->nosso_numero,
+                "valor_base"      => $boleto->valor_cobrado,
+                "data_documento"     => Carbon::parse($boleto->data_documento),
+                "data_processamento" => Carbon::parse($boleto->data_processamento),
+                "data_vencimento"    => Carbon::parse($boleto->data_vencimento),
+                'taxa'               => config('boleto')['taxa'],
+                'multa'              => config('boleto')['multa'],
+                'aceite'            => 'NÃO',
+                'especie_doc'       => 'DM',
+                'especie'           => 'R$',
+                'nome_sacado'       => '',
+                'cpf_cnpj_sacado'   => ''
+
+            ]
+        );
+        $boleto = new BoletoCEF(new BancoCEF(), $beneficiario, $pagador, $info);
+        $boleto
+            ->adicionaDemonstrativo('MULTA DE R$: :multa APOS: :vencimento')
+            ->adicionaDemonstrativo("JUROS DE R$: :taxa AO DIA")
+            ->adicionaInstrucao("- NÃO RECEBER APÓS 30 DIAS DO VENCIMENTO");
+        $boleto->processaDadosBoleto();
+        return view('admin.boletos.layouts._cef', compact('boleto'));
+    }
   ```
 
 ## Change log
