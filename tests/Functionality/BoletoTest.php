@@ -150,15 +150,16 @@ class BoletoTest extends AbstractTestCase
     /** @test */
     public function linha_digitavel_esta_sendo_calculada_corretamente()
     {
-        $beneficiario = new BeneficiarioCEF(FALSE,
-                                            [
-                                                'razao_social'  => "Razão Social da Empresa",
-                                                "agencia"       => "1234",
-                                                'cpf_cnpj'      => "12.123.123/0001-23",
-                                                'endereco'      => "Endereço da Empresa",
-                                                'cidade_estado' => "Ouro Fino / Minas Gerais",
-                                                'conta'         => '005507'
-                                            ]);
+        $beneficiario =
+            new BeneficiarioCEF(FALSE,
+                                [
+                                    'razao_social'  => "Razão Social da Empresa",
+                                    "agencia"       => "1234",
+                                    'cpf_cnpj'      => "12.123.123/0001-23",
+                                    'endereco'      => "Endereço da Empresa",
+                                    'cidade_estado' => "Ouro Fino / Minas Gerais",
+                                    'conta'         => '005507'
+                                ]);
         $pagador      = new Pagador(
             [
                 'nome'     => 'Tester',
@@ -167,21 +168,17 @@ class BoletoTest extends AbstractTestCase
                 'estado'   => 'Estado',
                 'cep'      => '37570-000',
                 'cpf_cnpj' => '12.123.123/0001-12'
-            ]
-        );
+            ]);
         $info         = new BoletoInfo(
             [
                 'nosso_numero'       => '222333777777777',
                 'aceite'             => 'NÃO',
                 'especie_doc'        => 'R$',
-                //                'nome_sacado'        => '',
-                //                'cpf_cnpj_sacado'    => '',
-                //                'especie'            => '',
                 'numero_documento'   => '1581-7/001',
                 'data_documento'     => '2015-06-10',
                 'data_processamento' => '2015-06-10',
                 'data_vencimento'    => '2006-08-23',
-                //                'dias_para_pagar'    => '',
+                'dias_para_pagar'    => '0',
                 'taxa'               => 0.0985,
                 'multa'              => 2,
                 'valor_base'         => 32112
@@ -195,22 +192,26 @@ class BoletoTest extends AbstractTestCase
             $info
         );
 
-        $this->assertEquals('10490.05505 77222.133348 77777.777713 4 32420000032112',
-                            $boleto->getLinhaDigitavelFormatada());
+        $fator_vencimento_atual = $boleto->calculaFatorVencimento(Carbon::now()->setTime(0, 0, 0));
+        $dv_geral               = $boleto->calculaDVGeralCodigoBarras();
+        $this->assertEquals(
+            '10490.05505 77222.133348 77777.777713 ' . $dv_geral . ' ' . $fator_vencimento_atual . '0000032112',
+            $boleto->getLinhaDigitavelFormatada());
     }
 
     /** @test */
     public function codigo_de_barras_esta_sendo_calculado_corretamente()
     {
-        $beneficiario = new BeneficiarioCEF(FALSE,
-        [
-            'razao_social'  => "Razão Social da Empresa",
-            "agencia"       => "1234",
-            'cpf_cnpj'      => "12.123.123/0001-23",
-            'endereco'      => "Endereço da Empresa",
-            'cidade_estado' => "Ouro Fino / Minas Gerais",
-            'conta'         => '005507'
-        ]);
+        $beneficiario =
+            new BeneficiarioCEF(FALSE,
+                                [
+                                    'razao_social'  => "Razão Social da Empresa",
+                                    "agencia"       => "1234",
+                                    'cpf_cnpj'      => "12.123.123/0001-23",
+                                    'endereco'      => "Endereço da Empresa",
+                                    'cidade_estado' => "Ouro Fino / Minas Gerais",
+                                    'conta'         => '005507'
+                                ]);
         $pagador      = new Pagador(
             [
                 'nome'     => 'Tester',
@@ -226,14 +227,11 @@ class BoletoTest extends AbstractTestCase
                 'nosso_numero'       => '222333777777777',
                 'aceite'             => 'NÃO',
                 'especie_doc'        => 'R$',
-                //                'nome_sacado'        => '',
-                //                'cpf_cnpj_sacado'    => '',
-                //                'especie'            => '',
                 'numero_documento'   => '1581-7/001',
                 'data_documento'     => '2015-06-10',
                 'data_processamento' => '2015-06-10',
                 'data_vencimento'    => '2006-08-23',
-                //                'dias_para_pagar'    => '',
+                'dias_para_pagar'    => '',
                 'taxa'               => 0.0985,
                 'multa'              => 2,
                 'valor_base'         => 32112
@@ -247,7 +245,10 @@ class BoletoTest extends AbstractTestCase
             $info
         );
 
-        $this->assertEquals('10494324200000321120055077222133347777777771',
+        $fator_vencimento_atual = $boleto->calculaFatorVencimento(Carbon::now()->setTime(0, 0, 0));
+        $dv_geral               = $boleto->calculaDVGeralCodigoBarras();
+
+        $this->assertEquals('1049' . $dv_geral . $fator_vencimento_atual . '00000321120055077222133347777777771',
                             $boleto->getCodigoBarras());
     }
 

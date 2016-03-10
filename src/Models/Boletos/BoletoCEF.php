@@ -155,14 +155,6 @@ class BoletoCEF extends Boleto
     }
 
     /**
-     * @param string $date_format
-     */
-    public function setDateFormat($date_format)
-    {
-        $this->date_format = $date_format;
-    }
-
-    /**
      * @return string
      */
     protected function getCampoLivreDoCodigoDeBarras()
@@ -186,7 +178,7 @@ class BoletoCEF extends Boleto
     }
 
     /**
-     * @param Carbon $data_vencimento
+     * @param Carbon|string $data_vencimento
      * @return string
      */
     public function calculaFatorVencimento($data_vencimento)

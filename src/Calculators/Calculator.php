@@ -122,22 +122,6 @@ abstract class Calculator
     }
 
     /**
-     * @param integer $percentual Valor em % ou já divido por 100
-     * @param integer $base
-     * @return int
-     */
-    public static function calculaPercentual($percentual, $base)
-    {
-        if ($percentual > 1)
-        {
-            $percentual = $percentual / 100;
-        }
-        $valor = intval($percentual * $base);
-
-        return $valor;
-    }
-
-    /**
      * Funcaoo auxiliar para calculo do modulo de 10, faz a soma dos digitos dado os pesos.
      *
      * @param string $numero

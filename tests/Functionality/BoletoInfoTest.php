@@ -8,7 +8,6 @@ class BoletoInfoTest extends AbstractTestCase
 {
     /** @var BoletoInfo $cef */
     protected $info;
-    protected $format = 'Y-m-d';
 
     public function setUp()
     {
@@ -21,7 +20,7 @@ class BoletoInfoTest extends AbstractTestCase
                 'dias_para_pagar'    => '1',
                 'taxa'               => 0.0985,
                 'multa'              => 2,
-                'valor_base'         => 25800
+                'valor_base'         => 26000
             ]);
     }
 
@@ -29,7 +28,7 @@ class BoletoInfoTest extends AbstractTestCase
     public function verifica_valor_final_para_boleto()
     {
         // Default , formato10digitos false e formato inteiro false
-        $valor_esperado = '258,00';
+        $valor_esperado = '260,00';
         $this->assertEquals($valor_esperado, $this->info->getValorFinal());
     }
 
@@ -37,7 +36,7 @@ class BoletoInfoTest extends AbstractTestCase
     public function verifica_valor_final_inteiro()
     {
         // Default , formato10digitos false e formato inteiro true
-        $valor_esperado = 25800;
+        $valor_esperado = 26000;
         $this->assertEquals($valor_esperado, $this->info->getValorFinal(FALSE, TRUE));
     }
 
@@ -45,11 +44,11 @@ class BoletoInfoTest extends AbstractTestCase
     public function verifica_valor_final_inteiro_10_digitos()
     {
         // Default , formato10digitos true e formato inteiro true
-        $valor_esperado = '0000025800';
+        $valor_esperado = '0000026000';
         $this->assertEquals($valor_esperado, $this->info->getValorFinal(TRUE, TRUE));
 
         // Default , formato10digitos true e formato inteiro true
-        $valor_esperado = '0000025800';
+        $valor_esperado = '0000026000';
         $this->assertEquals($valor_esperado, $this->info->getValorFinal(TRUE, FALSE));
     }
 
@@ -59,7 +58,7 @@ class BoletoInfoTest extends AbstractTestCase
         $this->info = new BoletoInfo(
             [
                 'data_documento'     => '2016-02-12',
-                'data_processamento' => '2016-03-04',
+                'data_processamento' => '2016-03-05',
                 'data_vencimento'    => '2016-03-05',
                 'dias_para_pagar'    => '1',
                 'taxa'               => 0.0985,
@@ -105,9 +104,9 @@ class BoletoInfoTest extends AbstractTestCase
     }
 
     /** @test */
-    public function verifica_data_vencimento_recebida()
+    public function verifica_data_vencimento_recebida_quando_vencida()
     {
-        $valor_esperado = Carbon::createFromFormat('d/m/Y', '05/03/2016')->setTime(0,0,0);
+        $valor_esperado = Carbon::now()->addDay(1)->setTime(0,0,0);
         $this->assertEquals($valor_esperado, $this->info->getDataVencimentoCalculada());
     }
 
@@ -117,90 +116,70 @@ class BoletoInfoTest extends AbstractTestCase
         $this->info     = new BoletoInfo(
             [
                 'data_documento'     => '2016-02-12',
-                'data_processamento' => '2016-03-04',
-                'dias_para_pagar'    => '1',
+                'data_processamento' => '2016-03-08',
+                'data_vencimento'    => '2016-03-05',
+                'dias_para_pagar'    => '0',
                 'taxa'               => 0.0985,
                 'multa'              => 2,
                 'valor_base'         => 25800,
 
             ]);
-        $valor_esperado = Carbon::createFromFormat($this->format, '2016-02-13')->setTime(0,0,0);
+        $valor_esperado = Carbon::now()->setTime(0,0,0);
         $this->assertEquals($valor_esperado, $this->info->getDataVencimentoCalculada());
 
         $this->info     = new BoletoInfo(
             [
                 'data_documento'     => '2016-03-08',
-                'data_processamento' => '2016-03-04',
+                'data_processamento' => '2016-03-08',
+                'data_vencimento'    => '2016-03-05',
                 'dias_para_pagar'    => '20',
                 'taxa'               => 0.0985,
                 'multa'              => 2,
                 'valor_base'         => 25800,
 
             ]);
-        $valor_esperado = Carbon::createFromFormat($this->format, '2016-03-28')->setTime(0,0,0);
+        $valor_esperado = Carbon::now()->addDay(20)->setTime(0,0,0);
         $this->assertEquals($valor_esperado, $this->info->getDataVencimentoCalculada());
 
         $this->info     = new BoletoInfo(
             [
                 'data_documento'     => '2016-03-08',
-                'data_processamento' => '2016-03-04',
+                'data_processamento' => '2016-03-08',
+                'data_vencimento'    => '2016-03-05',
                 'dias_para_pagar'    => '28',
                 'taxa'               => 0.0985,
                 'multa'              => 2,
                 'valor_base'         => 25800,
 
             ]);
-        $valor_esperado = Carbon::createFromFormat($this->format, '2016-04-05')->setTime(0,0,0);
+        $valor_esperado = Carbon::now()->addDay(28)->setTime(0,0,0);
         $this->assertEquals($valor_esperado, $this->info->getDataVencimentoCalculada());
     }
 
     /** @test */
-    public function verifica_getValorTaxa_retorna_valor_esperado_passando_percentual_formatado()
+    public function verifica_getValorTaxa_retorna_valor_esperado_com_retorno_string()
     {
         $this->info     = new BoletoInfo(
             [
                 'taxa'       => 2,
                 'valor_base' => 25800,
             ]);
-        $valor_esperado = '5,16';
+        $valor_esperado = '0,17';
         $this->assertEquals($valor_esperado, $this->info->getValorTaxa());
     }
 
     /** @test */
-    public function verifica_getValorTaxa_retorna_valor_esperado_passando_percentual_inteiro()
+    public function verifica_getValorTaxa_retorna_valor_esperado_com_retorno_inteiro()
     {
         $this->info     = new BoletoInfo(
             [
                 'taxa'       => 2,
                 'valor_base' => 25800,
             ]);
-        $valor_esperado = 516;
+        $valor_esperado = 17;
         $this->assertEquals($valor_esperado, $this->info->getValorTaxa(TRUE));
     }
 
-    /** @test */
-    public function verifica_getValorTaxa_retorna_valor_esperado_passando_percentual_calculado_com_retorno_inteiro()
-    {
-        $this->info     = new BoletoInfo(
-            [
-                'taxa'       => 0.02,
-                'valor_base' => 25800,
-            ]);
-        $valor_esperado = 516;
-        $this->assertEquals($valor_esperado, $this->info->getValorTaxa(TRUE));
-    }
-
-    /** @test */
-    public function verifica_getValorTaxa_retorna_valor_esperado_passando_percentual_calculado_com_retorno_formatado()
-    {
-        $this->info     = new BoletoInfo(
-            [
-                'taxa'       => 0.02,
-                'valor_base' => 25800,
-            ]);
-        $valor_esperado = '5,16';
-        $this->assertEquals($valor_esperado, $this->info->getValorTaxa());
-    }
 
      /** @test */
     public function verifica_getValorMulta_retorna_valor_esperado_passando_percentual_formatado()

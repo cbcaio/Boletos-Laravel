@@ -24,7 +24,7 @@ class BeneficiarioCEFTest extends AbstractTestCase
     {
         $this->assertEquals("123456", $this->beneficiario->getCodigoBeneficiario());
         $this->assertEquals("1234", $this->beneficiario->getAgencia());
-        $this->assertEquals("02", $this->beneficiario->getCarteira());
+        $this->assertEquals("SR", $this->beneficiario->getCarteira());
         $this->assertEquals("Ouro Fino / Minas Gerais", $this->beneficiario->getCidadeEstado());
         $this->assertEquals("12.123.123/0001-23", $this->beneficiario->getCpfCnpj());
         $this->assertEquals("Endereço da Empresa", $this->beneficiario->getEndereco());

@@ -15,9 +15,9 @@ abstract class Boleto implements BoletoInterface
         ':multa',
         ':vencimento'
     ];
-    protected $beneficiario;
-    protected $pagador;
-    protected $info;
+    public $beneficiario;
+    public $pagador;
+    public $info;
     public    $banco;
     public    $demonstrativo_array = [];
     public    $instrucoes_array    = [];
@@ -199,7 +199,7 @@ abstract class Boleto implements BoletoInterface
                         break;
                     case ":vencimento":
                         $string = preg_replace("/$attribute" . '\b/',
-                                               $this->info->getDataVencimentoCalculada(), $string);
+                                               $this->info->getDataVencimentoCalculada()->format('d/m/Y'), $string);
                         break;
                 }
             }
