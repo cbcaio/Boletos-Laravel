@@ -16,7 +16,7 @@ class BoletoInfoTest extends AbstractTestCase
             [
                 'data_documento'     => '2016-02-12',
                 'data_processamento' => '2016-03-05',
-                'data_vencimento'    => '2016-03-05',
+                'data_vencimento'    => '2016-05-05',
                 'dias_para_pagar'    => '1',
                 'taxa'               => 0.0985,
                 'multa'              => 2,
@@ -59,7 +59,7 @@ class BoletoInfoTest extends AbstractTestCase
             [
                 'data_documento'     => '2016-02-12',
                 'data_processamento' => '2016-03-05',
-                'data_vencimento'    => '2016-03-05',
+                'data_vencimento'    => '2016-05-05',
                 'dias_para_pagar'    => '1',
                 'taxa'               => 0.0985,
                 'multa'              => 2,
@@ -76,7 +76,7 @@ class BoletoInfoTest extends AbstractTestCase
             [
                 'data_documento'     => '2016-02-12',
                 'data_processamento' => '2016-03-05',
-                'data_vencimento'    => '2016-03-05',
+                'data_vencimento'    => '2016-04-13',
                 'dias_para_pagar'    => '1',
                 'taxa'               => 0.0985,
                 'multa'              => 2,
@@ -106,7 +106,7 @@ class BoletoInfoTest extends AbstractTestCase
     /** @test */
     public function verifica_data_vencimento_recebida_quando_vencida()
     {
-        $valor_esperado = Carbon::now()->addDay(1)->setTime(0,0,0);
+        $valor_esperado = Carbon::now()->setTime(0,0,0);
         $this->assertEquals($valor_esperado, $this->info->getDataVencimentoCalculada());
     }
 
@@ -181,7 +181,7 @@ class BoletoInfoTest extends AbstractTestCase
     }
 
 
-     /** @test */
+    /** @test */
     public function verifica_getValorMulta_retorna_valor_esperado_passando_percentual_formatado()
     {
         $this->info     = new BoletoInfo(
