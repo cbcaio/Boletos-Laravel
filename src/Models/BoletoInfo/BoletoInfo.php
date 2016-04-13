@@ -105,8 +105,12 @@ class BoletoInfo extends Boleto
      */
     public function getDataDocumento()
     {
-        return Carbon::createFromFormat(
-            $this->date_format, $this->attributes['data_documento'])->setTime(0, 0, 0);
+        if ($this->attributes['data_documento'] instanceof Carbon) {
+            return $this->attributes['data_documento']->setTime(0, 0, 0);
+        } else {
+            return Carbon::createFromFormat(
+                $this->date_format, $this->attributes['data_documento'])->setTime(0, 0, 0);
+        }
     }
 
     /**
