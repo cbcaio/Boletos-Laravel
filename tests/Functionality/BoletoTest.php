@@ -195,7 +195,7 @@ class BoletoTest extends AbstractTestCase
         $fator_vencimento_atual = $boleto->calculaFatorVencimento(Carbon::now()->setTime(0, 0, 0));
         $dv_geral               = $boleto->calculaDVGeralCodigoBarras();
         $this->assertEquals(
-            '10490.05505 77222.133348 77777.777713 ' . $dv_geral . ' ' . $fator_vencimento_atual . '0000032112',
+            '10490.05505 77222.133348 77777.777713 ' . $dv_geral . ' ' . $fator_vencimento_atual . '0000036275',//32112
             $boleto->getLinhaDigitavelFormatada());
     }
 
@@ -248,7 +248,8 @@ class BoletoTest extends AbstractTestCase
         $fator_vencimento_atual = $boleto->calculaFatorVencimento(Carbon::now()->setTime(0, 0, 0));
         $dv_geral               = $boleto->calculaDVGeralCodigoBarras();
 
-        $this->assertEquals('1049' . $dv_geral . $fator_vencimento_atual . '00000321120055077222133347777777771',
+        $this->assertEquals('1049' . $dv_geral . $fator_vencimento_atual . '00000362750055077222133347777777771',
+        //'00000321120055077222133347777777771',
                             $boleto->getCodigoBarras());
     }
 
